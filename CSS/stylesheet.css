@@ -1,0 +1,148 @@
+/* Cascade Style Sheet for this website */
+:root{
+    --regular-font: Verdana, Geneva, Tahoma, sans-serif;
+
+    --blue: #1d9ec9;
+    --white: #fff;
+    --black:#000; 
+    --orange: #C9741C;
+}
+
+* {
+   font-family: var(--regular-font);
+   margin: auto;
+   
+}
+
+/* Navigation */
+.navbar {
+    position: fixed;
+    top: 0px;
+
+}
+
+.navbar ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar li {
+    float: left;
+}
+
+.navbar li a {
+    display: block;
+    color: var(--white);
+    background-color: var(--blue);
+    text-align: center;
+    text-decoration: none;
+    padding: 5px 10px;
+}
+
+.navbar li a:hover {
+    background-color: var(--white);
+    color: var(--black);
+}
+
+/*Content*/
+
+.content /* Content */{
+    width: 800px;
+    font-size: 12px;
+    color: var(--black);
+    margin-top: 50px;
+    
+}
+
+.content block {
+    display: block;
+    width: auto;
+    padding: 10px;
+    
+    background-color: var(--blue);
+    color: var(--white);
+}
+
+.content block p {
+    margin: 5px;
+}
+
+.content div {
+    margin: 10px;
+
+}
+
+h1, h2, h3 {
+    min-height: 48px;
+    text-align: center;
+    color: var(--blue);
+}
+
+/*Form*/
+input, textarea, select {
+    width: 400px;
+}
+
+
+input[type="radio"] {
+    width: auto;
+}
+
+/*Submit button*/
+input[type="submit"] {
+    width:auto;
+    padding: 10px;
+    margin: 10px;
+    border-radius: 15px;
+    background-color: var(--blue);
+    color: var(--white);
+    font-weight: bold;
+    
+}
+
+input[type="submit"]:hover{
+    background-color: var(--black);    
+}
+
+fieldset {
+    border-style: none;
+    margin: 0px 0px 0px -10px;
+}
+/*Labels*/
+label {
+    display:inline-block;
+    width: 120px;
+    font-weight: bold;
+}
+
+
+input[type="radio"]+label{
+    width:auto;
+    font-weight:normal;
+}
+
+.radiobuttons ul {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.error {
+    color:var(--orange);
+    font-weight: bold;
+}
+
+
+/*Footer*/
+footer {
+    position: fixed;
+    bottom: 0px;
+    width: 100%;;
+    
+    background-color: black;
+    color: white;
+    font-size: 10px;
+    text-align: right;
+    
+}
