@@ -1,7 +1,7 @@
 <?php
-function showFooter ()
+function showFooter()
 {
-    echo 
+    echo
     '<footer>
         <p>&copy;2024 Lonne Olmeyer</p>
     </footer>';

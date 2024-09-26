@@ -1,14 +1,14 @@
 <?php
-function showRegisterPage ()
+function showRegisterPage()
 {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $data = validateRegisterForm();
-        if($data['valid'] == false){
-            showRegisterForm ($data); 
+        if ($data['valid'] == false) {
+            showRegisterForm($data);
         } else {
             showRegisterSuccess();
             require_once 'login.php';
-            showLoginForm ($data);
+            showLoginForm($data);
         }
     } else {
         $data = '';
@@ -16,7 +16,7 @@ function showRegisterPage ()
     }
 }
 
-function validateRegisterForm ()
+function validateRegisterForm()
 {
     $firstName = $lastName = $email = $password = $passwordRepeat = '';
 
@@ -24,7 +24,7 @@ function validateRegisterForm ()
 
     $firstNameErr = $lastNameErr = $emailErr = $emailExistsErr = $passwordErr = $passwordRepeatErr = '';
 
-    $valid =false;
+    $valid = false;
 
 
     $firstName = getPostVar('firstName');
@@ -33,57 +33,55 @@ function validateRegisterForm ()
     $password = getPostVar('password');
     $passwordRepeat = getPostVar('passwordRepeat');
 
-    if (empty($firstName)){
+    if (empty($firstName)) {
         $firstNameErr = "Voornaam is verplicht";
     } else {
-        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/",$firstName)) {
+        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $firstName)) {
             $firstNameErr = "Alleen letters en spaties zijn toegestaan";
         }
     }
 
-    if (empty($lastName)){
+    if (empty($lastName)) {
         $lastNameErr = "Achternaam is verplicht";
     } else {
-        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/",$lastName)) {
+        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $lastName)) {
             $lastNameErr = "Alleen letters en spaties zijn toegestaan";
         }
     }
 
-    if (empty($email)){
+    if (empty($email)) {
         $emailErr = "E-mail is verplicht";
     } else {
-        if(!filter_var($email, FILTER_VALIDATE_EMAIL)){
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             $emailErr = "Ongeldig e-mailadres";
         }
     }
 
-    if (empty($password)){
+    if (empty($password)) {
         $passwordErr = "Kies een wachtwoord";
     }
 
-    if (empty($passwordRepeat)){
+    if (empty($passwordRepeat)) {
         $passwordRepeatErr = "Herhaal het gekozen wachtwoord";
     }
 
-    if(!empty($password&&$passwordRepeat)){
-        if(!($password === $passwordRepeat)){
+    if (!empty($password && $passwordRepeat)) {
+        if (!($password === $passwordRepeat)) {
             $passwordRepeatErr = "Herhaald wachtwoord komt niet overeen";
         }
     }
-    
-    if(empty($firstNameErr)&&(empty($lastNameErr))&&(empty($emailErr))&&(empty($passwordErr))&&(empty($passwordRepeatErr)))
-    {
-       $userInput = createUserArray($firstName, $lastName, $email, $password);
-       if(userExists($email)){
-           $emailExistsErr = "Er bestaat al een account met dit e-mailadres";
-       } else { 
-           saveUser($userInput);
-       }
 
-       if(empty($firstNameErr)&&(empty($lastNameErr))&&(empty($emailErr))&&(empty($emailExistsErr))&&(empty($passwordErr))&&(empty($passwordRepeatErr)))
-       {
-       $valid = true;
-       }
+    if (empty($firstNameErr) && (empty($lastNameErr)) && (empty($emailErr)) && (empty($passwordErr)) && (empty($passwordRepeatErr))) {
+        $userInput = createUserArray($firstName, $lastName, $email, $password);
+        if (userExists($email)) {
+            $emailExistsErr = "Er bestaat al een account met dit e-mailadres";
+        } else {
+            saveUser($userInput);
+        }
+
+        if (empty($firstNameErr) && (empty($lastNameErr)) && (empty($emailErr)) && (empty($emailExistsErr)) && (empty($passwordErr)) && (empty($passwordRepeatErr))) {
+            $valid = true;
+        }
     }
 
     $data = array(
@@ -104,7 +102,7 @@ function validateRegisterForm ()
     return $data;
 }
 
-function showRegisterForm ($data)
+function showRegisterForm($data)
 {
     echo '<h2>Maak een account aan</h2>
     <div class="content">
@@ -113,29 +111,51 @@ function showRegisterForm ($data)
         <fieldset>
         <div>
             <label for=firstName>Voornaam:</label>
-            <input type="text" id="firstName" name="firstName" value= "'; echo $data['firstName']??''; echo '"> 
-            <span class="error">'; echo $data['firstNameErr']??''; echo'</span>
+            <input type="text" id="firstName" name="firstName" value= "';
+    echo $data['firstName'] ?? '';
+    echo '"> 
+            <span class="error">';
+    echo $data['firstNameErr'] ?? '';
+    echo '</span>
         </div>
         <div>
             <label for=lastName>Achternaam:</label>
-            <input type="text" id="lastName" name="lastName" value= "'; echo $data['lastName']??''; echo '">
-            <span class="error">'; echo $data['lastNameErr']??''; echo'</span>
+            <input type="text" id="lastName" name="lastName" value= "';
+    echo $data['lastName'] ?? '';
+    echo '">
+            <span class="error">';
+    echo $data['lastNameErr'] ?? '';
+    echo '</span>
         </div>
         <div>
             <label for=email>E-mail:</label>
-            <input type="email" id="email" name="email" value="'; echo $data['email']??''; echo  '">
-            <span class="error">'; echo $data['emailErr']??''; echo'</span>
-            <span class="error">'; echo $data['emailExistsErr']??''; echo'</span>
+            <input type="email" id="email" name="email" value="';
+    echo $data['email'] ?? '';
+    echo  '">
+            <span class="error">';
+    echo $data['emailErr'] ?? '';
+    echo '</span>
+            <span class="error">';
+    echo $data['emailExistsErr'] ?? '';
+    echo '</span>
         </div>
         <div>
             <label for=password>Wachtwoord:</label>
-            <input type="password" id="password" name="password" value="'; echo $data['password']??''; echo '">
-            <span class="error">'; echo $data['passwordErr']??''; echo'</span>
+            <input type="password" id="password" name="password" value="';
+    echo $data['password'] ?? '';
+    echo '">
+            <span class="error">';
+    echo $data['passwordErr'] ?? '';
+    echo '</span>
         </div>
         <div>
             <label for=passwordRepeat>Herhaal je wachtwoord:</label>
-            <input type="password" id="passwordRepeat" name="passwordRepeat" value="'; echo $data['passwordRepeat']??''; echo '">
-            <span class="error">'; echo $data['passwordRepeatErr']??''; echo'</span>
+            <input type="password" id="passwordRepeat" name="passwordRepeat" value="';
+    echo $data['passwordRepeat'] ?? '';
+    echo '">
+            <span class="error">';
+    echo $data['passwordRepeatErr'] ?? '';
+    echo '</span>
         </div>
         <div>
             <input type="submit">
@@ -145,9 +165,9 @@ function showRegisterForm ($data)
     </div>';
 }
 
-function showRegisterSuccess ()
+function showRegisterSuccess()
 {
     echo '<h3>
     Registratie gelukt!
-    </h3>';   
+    </h3>';
 }

@@ -6,18 +6,18 @@ require_once 'session_manager.php';
 
 function showActiveMenu()
 {
-    echo 
+    echo
     '<div class="navbar">
     <ul>
         <li><a href="index.php?page=home">HOME</a></li>
         <li><a href="index.php?page=about">ABOUT</a></li>
         <li><a href="index.php?page=contact">CONTACT</a></li>
-        <li><a href="index.php?page=logout">LOGOUT '.$_SESSION['name'].'</a></li>
+        <li><a href="index.php?page=logout">LOGOUT ' . $_SESSION['name'] . '</a></li>
     </ul>
     </div>';
 }
 
-function showInactiveMenu ()
+function showInactiveMenu()
 {
     echo
     '<div class="navbar">

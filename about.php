@@ -1,5 +1,5 @@
 <?php
-function showAboutPage ()
+function showAboutPage()
 {
     echo
     '<div class="content">
@@ -23,4 +23,4 @@ function showAboutPage ()
     <p>Wie weet hoort daar binnenkort ook coderen bij :)</p>
     </div>
     </div>';
-    };
+};

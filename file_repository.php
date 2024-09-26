@@ -1,23 +1,23 @@
 <?php
 define('USER_FILE_NAME', "users/users.txt");
 
-function getUser(string $email): ?array {   
+function getUser(string $email): ?array
+{
     $userData = fopen(USER_FILE_NAME, "r");
     try {
-        while (!feof($userData)){
+        while (!feof($userData)) {
             $line = fgets($userData);
             $parts = transformRecordToArray($line);
-            if($parts[0] == $email) {
+            if ($parts[0] == $email) {
                 $foundUser = array('email' => $parts[0], 'name' => $parts[1], 'password' => $parts[2]);
                 return $foundUser;
             }
         }
         return null;
-        }
-        finally {
-            fclose($userData);
-        }
+    } finally {
+        fclose($userData);
     }
+}
 
 
 function saveUser(array $userArray): void
@@ -26,8 +26,7 @@ function saveUser(array $userArray): void
     $userData = fopen(USER_FILE_NAME, "a");
     try {
         fwrite($userData, $newUser);
-    }
-    finally {
+    } finally {
         fclose($userData);
     }
 }
