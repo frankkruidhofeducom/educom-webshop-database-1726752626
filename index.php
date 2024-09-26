@@ -1,7 +1,8 @@
 <?php
 session_start();
 
-require_once 'file_repository.php';
+require_once 'config.php';
+require_once 'database.php';
 require_once 'user_service.php';
 require_once 'session_manager.php';
 
@@ -13,8 +14,8 @@ showResponsePage($page);
 function getRequestedPage()
 {
     $request_type = $_SERVER['REQUEST_METHOD'];
-    if($request_type=='POST'){
-        $requested_page = getPageFromPost('page','home');
+    if ($request_type == 'POST') {
+        $requested_page = getPageFromPost('page', 'home');
     } else {
         $requested_page = getPageFromUrl('page', 'home');
     }
@@ -23,16 +24,16 @@ function getRequestedPage()
 
 function getPageFromPost($key, $default = '')
 {
-    if(isset($_POST[$key])){
+    if (isset($_POST[$key])) {
         return $_POST[$key];
     } else {
         return $default;
     }
 };
 
-function getPageFromUrl($key, $default='')
+function getPageFromUrl($key, $default = '')
 {
-    if(isset($_GET[$key])){
+    if (isset($_GET[$key])) {
         return $_GET[$key];
     } else {
         return $default;
@@ -83,27 +84,26 @@ function showBodyStart()
     echo '<body>';
 };
 
-function showMenu ()
+function showMenu()
 {
-   require_once 'menu.php';
-   if (isset($_SESSION['loggedIn'])) {
-    showActiveMenu();
-   } else  {
-    showInactiveMenu();
-   }
+    require_once 'menu.php';
+    if (isset($_SESSION['loggedIn'])) {
+        showActiveMenu();
+    } else {
+        showInactiveMenu();
+    }
 }
 
-function showContent ($page)
+function showContent($page)
 {
-    switch($page)
-    {
+    switch ($page) {
         case 'home':
             require_once 'home.php';
             showHomePage();
             break;
         case 'about':
             require_once 'about.php';
-            showAboutPage ();
+            showAboutPage();
             break;
         case 'contact':
             require_once 'contact.php';
@@ -126,26 +126,26 @@ function showContent ($page)
             require_once 'home.php';
             break;
     }
-
 };
 
-function showBodyEnd ()
+function showBodyEnd()
 {
     echo '</body>';
 };
 
-function cleanString($string){
+function cleanString($string)
+{
     $string = trim($string);
     $string = stripslashes($string);
     $string = htmlspecialchars($string);
     return $string;
 }
 
-function getPostVar ($key, $default=''){
-    if(isset($_POST[$key])){
+function getPostVar($key, $default = '')
+{
+    if (isset($_POST[$key])) {
         return cleanString($_POST[$key]);
     } else {
         return $default;
     }
 }
-
