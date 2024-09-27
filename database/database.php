@@ -7,7 +7,7 @@ function connectDatabase() //connect to database
     $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASS, DB_NAME);
     // check connection 
     if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
+        die("Connection failed: " . $conn->connect_error . "<br>Er kan op dit moment geen verbinding gemaakt worden met het gebruikersbestand");
     }
 
     return $conn;
@@ -22,7 +22,11 @@ function createNewUser(string $name, string $email, string $password) // insert 
 
     $stmt->execute();
 
+    if ($stmt->errno != 0) {
+        echo "Er ging iets fout... " . $stmt->error;
+    }
     $stmt->close();
+
     $conn->close();
 }
 
