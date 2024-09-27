@@ -1,18 +1,34 @@
 <?php
 require_once 'config.php';
 
-//connect to database 
-function connectDatabase()
+function connectDatabase() //connect to database 
 {
-    $conn = mysqli_connect(SERVER_NAME, DB_USERNAME, DB_PASS, DB_NAME);
-    if (!$conn) {
-        die("Connection failed: " . mysqli_connect_error());
-    } else {
-        return $conn;
+    // establish connection
+    $conn = new mysqli(SERVER_NAME, DB_USERNAME, DB_PASS, DB_NAME);
+    // check connection 
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
     }
+    echo "Connected successfully! <br>";
+
+    return $conn;
 }
 
-function getUserByEmail(string $email)  // find user by email adress
+function createNewUser(string $name, string $email, string $password) // insert new user login to users table
+{
+    $conn = connectDatabase();
+
+    $stmt = $conn->prepare("INSERT INTO users (name, email, password) VALUES (?, ?, ?)");
+    $stmt->bind_param("sss", $name, $email, $password);
+
+    $stmt->execute();
+
+    $stmt->close();
+    $conn->close();
+}
+
+
+function getUserByEmail(string $email): ?array // find user in users table by email adress, returns array of all matching rows
 {
     // prepare statement
     $conn = connectDatabase();
@@ -21,30 +37,12 @@ function getUserByEmail(string $email)  // find user by email adress
 
     // set parameters & execute statement 
     $stmt->execute();
-    $stmt->bind_result($foundUserId, $foundName, $foundEmail, $foundPassword); // get results 
-
-    while ($stmt->fetch()) {
-        printf("user_id = %i, name = %s, email = %s, password = %s\n", $foundUserId, $foundName, $foundEmail, $foundPassword);
-    }
-
-    // if there are no results, return false
+    $foundUsers = $stmt->get_result()->fetch_all(MYSQLI_ASSOC); // returns an array of each matching row IN AN ARRAY    
+    // dus als er meerdere accounts zijn met hetzelfde email adres, moet de password match functie uitzoeken bij welk van deze accounts het pw matcht!
 
     // close statement
     $stmt->close();
     $conn->close();
     // return array
-    // return $user;
+    return $foundUsers;
 }
-
-function createNewUser(string $name, string $email, string $password): void // create new user record 
-{
-    // prepare statement
-    $create_user = $GLOBALS['conn']->prepare("INSERT INTO users (name, email, password) VALUES (?,?,?)");
-    $create_user->bind_param("sss", $name, $email, $password);
-    // set parameters and execute
-    $create_user->execute();
-    // close statement
-    $create_user->close();
-}
-
-// closes opened database connection 
