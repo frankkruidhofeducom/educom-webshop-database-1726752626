@@ -1,6 +1,6 @@
 <?php
 
-function userExists(string $email): bool
+function userExists(string $email): bool // check if e-mail is registered in database
 {
     if (empty(getUserByEmail($email))) {
         return false;
@@ -8,20 +8,20 @@ function userExists(string $email): bool
     return true;
 }
 
-function registrationSuccessful($formInput): bool
+function registrationSuccessful($formInput): bool //true if new user could be saved to database successfully, false if not
 {
-    if (registerNewUser($formInput)) {
+    if (doRegisterNewUser($formInput)) {
         return true;
     }
     return false;
 }
 
-function registerNewUser($formInput): bool
+function doRegisterNewUser($formInput): bool // decides if register attempt can go through and calls saveUserData function
 {
     if (
         validRegisterFormInput($formInput) &&
         (!userExists($formInput['email'])) &&
-        (passwordsMatch($formInput))
+        (repeatPassword($formInput))
     ) {
         saveUserData($formInput);
         return true;
@@ -29,7 +29,15 @@ function registerNewUser($formInput): bool
     return false;
 }
 
-function passwordsMatch($formInput): bool
+function repeatPassword($formInput): bool //checks if password repeat password is identical
+{
+    if ($formInput['password'] == $formInput['passwordRepeat']) {
+        return true;
+    }
+    return false;
+}
+
+function verifyLogin($formInput): bool // verifies if user login attempt matches user login in database 
 {
     $email = $formInput['email'];
     $password = $formInput['password'];
@@ -41,7 +49,7 @@ function passwordsMatch($formInput): bool
     return false;
 }
 
-function saveUserData($data): void
+function saveUserData($data): void //formats new user record and calls createNewUser function in database
 {
     $combineName = array($data['firstName'], $data['lastName']);
     $email = $data['email'];
@@ -52,20 +60,7 @@ function saveUserData($data): void
     createNewUser($name, $email, $password);
 }
 
-function authenticateUser(string $email, string $password): bool
-{
-    if (userExists($email)) {
-        if (!array_search($password, getUser($email))) {
-            return false;
-        } else {
-            return true;
-        }
-    } else {
-        return false;
-    }
-}
-
-function validEmail(string $email): bool
+function validEmail(string $email): bool // validates email input 
 {
     if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
         return true;

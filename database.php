@@ -9,12 +9,11 @@ function connectDatabase() //connect to database
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     }
-    echo "Connected successfully! <br>";
 
     return $conn;
 }
 
-function createNewUser(string $name, string $email, string $password) // insert new user login to users table
+function createNewUser(string $name, string $email, string $password) // insert new user record into database
 {
     $conn = connectDatabase();
 
@@ -28,7 +27,7 @@ function createNewUser(string $name, string $email, string $password) // insert 
 }
 
 
-function getUserByEmail(string $email): ?array // find user in users table by email adress, returns array of all matching rows
+function getUserByEmail(string $email): ?array // find user in users table by email adress, returns array
 {
     // prepare statement
     $conn = connectDatabase();
@@ -37,8 +36,7 @@ function getUserByEmail(string $email): ?array // find user in users table by em
 
     // set parameters & execute statement 
     $stmt->execute();
-    $foundUsers = $stmt->get_result()->fetch_all(MYSQLI_ASSOC); // returns an array of each matching row IN AN ARRAY    
-    // dus als er meerdere accounts zijn met hetzelfde email adres, moet de password match functie uitzoeken bij welk van deze accounts het pw matcht!
+    $foundUsers = $stmt->get_result()->fetch_assoc();
 
     // close statement
     $stmt->close();
