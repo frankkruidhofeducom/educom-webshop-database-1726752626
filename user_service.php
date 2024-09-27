@@ -2,7 +2,7 @@
 
 function userExists(string $email): bool
 {
-    if (empty(getUser($email))) {
+    if (empty(getUserByEmail($email))) {
         return false;
     }
 

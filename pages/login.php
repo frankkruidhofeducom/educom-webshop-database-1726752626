@@ -27,8 +27,6 @@ function validLoginForm($email, $password): bool
     return false;
 }
 
-
-
 function showLoginForm()
 {
     echo '<h2>Login</h2>
@@ -60,13 +58,6 @@ function showLoginForm()
         </fieldset>
     </form>
     </div>';
-}
-
-function doLoginUser($email)
-{
-    $user = getUser($email);    // haal rest variabelen op uit getuser 
-    setUserSession($user);     //geeft variabelen door aan session manager 
-
 }
 
 function showLoginSucceeded()

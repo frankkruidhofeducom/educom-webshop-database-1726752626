@@ -6,6 +6,7 @@ function showRegisterPage()
         if ($data['valid'] == false) {
             showRegisterForm($data);
         } else {
+            registerNewUser ();
             showRegisterSuccess();
             require_once 'login.php';
             showLoginForm($data);
@@ -100,6 +101,25 @@ function validateRegisterForm()
         'valid' => $valid
     );
     return $data;
+}
+
+function registerNewUser ($data):void
+{
+    $combineName = array($data['firstName'], $data['lastName']);
+    $email = $data['email'];
+    $password = $data['password'];
+
+    if (!userExists($email)){
+        $name = implode(" ", $combineName);
+        createNewUser($name, $email, $password);
+    } else {
+        showUserExistsError();
+    }
+}
+
+function showUserExistsError()
+{
+    echo 'Hier komt een error melding dat het account al bestaat en een link naar de login pagina';
 }
 
 function showRegisterForm($data)

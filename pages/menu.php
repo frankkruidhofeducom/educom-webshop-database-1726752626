@@ -1,9 +1,6 @@
 <?php
 require_once 'session_manager.php';
 
-
-
-
 function showActiveMenu()
 {
     echo

@@ -38,4 +38,4 @@ function createNewUser(string $name, string $email, string $password): void // c
 }
 
 // closes opened database connection 
-$conn->close();
+
