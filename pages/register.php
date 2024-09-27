@@ -1,128 +1,78 @@
 <?php
+
+require_once 'user_service.php';
+
 function showRegisterPage()
 {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
-        $data = validateRegisterForm();
-        if ($data['valid'] == false) {
-            showRegisterForm($data);
+        $formInput = getDataFromForm();
+        if (!registrationSuccessful($formInput)) {
+            showRegisterForm($formInput);
         } else {
-            registerNewUser ();
-            showRegisterSuccess();
+            showRegisterSuccess($formInput);
             require_once 'login.php';
-            showLoginForm($data);
         }
     } else {
-        $data = '';
-        showRegisterForm($data);
+        showRegisterForm();
     }
 }
 
-function validateRegisterForm()
+function getDataFromForm(): array
 {
-    $firstName = $lastName = $email = $password = $passwordRepeat = '';
-
-    $fullName = '';
-
-    $firstNameErr = $lastNameErr = $emailErr = $emailExistsErr = $passwordErr = $passwordRepeatErr = '';
-
-    $valid = false;
-
-
     $firstName = getPostVar('firstName');
     $lastName = getPostVar('lastName');
     $email = getPostVar('email');
     $password = getPostVar('password');
     $passwordRepeat = getPostVar('passwordRepeat');
 
-    if (empty($firstName)) {
-        $firstNameErr = "Voornaam is verplicht";
-    } else {
-        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $firstName)) {
+    $formInput = array(
+        'firstName' => $firstName,
+        'lastName' => $lastName,
+        'email' => $email,
+        'password' => $password,
+        'passwordRepeat' => $passwordRepeat
+    );
+    return $formInput;
+}
+
+function validRegisterFormInput($formInput): bool
+{
+    if (!empty($formInput['firstName'])) {
+        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $formInput['firstName'])) {
             $firstNameErr = "Alleen letters en spaties zijn toegestaan";
         }
     }
 
-    if (empty($lastName)) {
-        $lastNameErr = "Achternaam is verplicht";
-    } else {
-        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $lastName)) {
+    if (!empty($formInput['lastName'])) {
+        if (!preg_match("/^[A-Za-zÀ-ÖØ-öø-ÿ\-\s]*$/", $formInput['lastName'])) {
             $lastNameErr = "Alleen letters en spaties zijn toegestaan";
         }
     }
 
-    if (empty($email)) {
-        $emailErr = "E-mail is verplicht";
-    } else {
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    if (!empty($formInput['email'])) {
+        if (!filter_var($formInput['email'], FILTER_VALIDATE_EMAIL)) {
             $emailErr = "Ongeldig e-mailadres";
         }
     }
 
-    if (empty($password)) {
-        $passwordErr = "Kies een wachtwoord";
-    }
-
-    if (empty($passwordRepeat)) {
-        $passwordRepeatErr = "Herhaal het gekozen wachtwoord";
-    }
-
-    if (!empty($password && $passwordRepeat)) {
-        if (!($password === $passwordRepeat)) {
+    if (!empty($formInput['password'] && $formInput['passwordRepeat'])) {
+        if (!($formInput['password'] === $formInput['passwordRepeat'])) {
             $passwordRepeatErr = "Herhaald wachtwoord komt niet overeen";
         }
     }
 
-    if (empty($firstNameErr) && (empty($lastNameErr)) && (empty($emailErr)) && (empty($passwordErr)) && (empty($passwordRepeatErr))) {
-        $userInput = createUserArray($firstName, $lastName, $email, $password);
-        if (userExists($email)) {
-            $emailExistsErr = "Er bestaat al een account met dit e-mailadres";
-        } else {
-            saveUser($userInput);
-        }
-
-        if (empty($firstNameErr) && (empty($lastNameErr)) && (empty($emailErr)) && (empty($emailExistsErr)) && (empty($passwordErr)) && (empty($passwordRepeatErr))) {
-            $valid = true;
-        }
+    if (empty($firstNameErr) && (empty($lastNameErr)) && (empty($emailErr)) && (empty($passwordRepeatErr))) {
+        return true;
     }
-
-    $data = array(
-        'firstName' => $firstName,
-        'lastName' => $lastName,
-        'fullName' => $fullName,
-        'email' => $email,
-        'password' => $password,
-        'passwordRepeat' => $passwordRepeat,
-        'firstNameErr' => $firstNameErr,
-        'lastNameErr' => $lastNameErr,
-        'emailErr' => $emailErr,
-        'emailExistsErr' => $emailExistsErr,
-        'passwordErr' => $passwordErr,
-        'passwordRepeatErr' => $passwordRepeatErr,
-        'valid' => $valid
-    );
-    return $data;
+    return false;
 }
 
-function registerNewUser ($data):void
-{
-    $combineName = array($data['firstName'], $data['lastName']);
-    $email = $data['email'];
-    $password = $data['password'];
-
-    if (!userExists($email)){
-        $name = implode(" ", $combineName);
-        createNewUser($name, $email, $password);
-    } else {
-        showUserExistsError();
-    }
-}
-
-function showUserExistsError()
+function showUserExists()
 {
     echo 'Hier komt een error melding dat het account al bestaat en een link naar de login pagina';
 }
 
-function showRegisterForm($data)
+function showRegisterForm()
 {
     echo '<h2>Maak een account aan</h2>
     <div class="content">
