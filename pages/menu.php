@@ -1,29 +1,60 @@
 <?php
 require_once 'session_manager.php';
 
-function showActiveMenu()
+function buildMenu($userLoggedIn)
+{
+    showMenuStart();
+    showFixedMenuItems();
+    showDynamicMenuItems($userLoggedIn);
+    showMenuEnd();
+}
+
+function showMenuStart()
 {
     echo
     '<div class="navbar">
-    <ul>
-        <li><a href="index.php?page=home">HOME</a></li>
+    <ul>';
+}
+
+function showFixedMenuItems()
+{
+    echo
+    '<li><a href="index.php?page=home">HOME</a></li>
         <li><a href="index.php?page=about">ABOUT</a></li>
-        <li><a href="index.php?page=contact">CONTACT</a></li>
-        <li><a href="index.php?page=logout">LOGOUT ' . $_SESSION['name'] . '</a></li>
-    </ul>
+        <li><a href="index.php?page=contact">CONTACT</a></li>';
+}
+
+function showMenuEnd()
+{
+    echo
+    '</ul>
     </div>';
 }
 
-function showInactiveMenu()
+function showDynamicMenuItems($userLoggedIn)
+{
+    if ($userLoggedIn) {
+        showLogoutButton();
+    } else {
+        showLoginButton();
+        showRegisterButton();
+    }
+}
+
+function showLogoutButton()
+{
+    echo 
+    '<li><a href="index.php?page=logout">LOGOUT ' . $_SESSION['name'] . '</a></li>';
+}
+
+function showLoginButton()
 {
     echo
-    '<div class="navbar">
-    <ul>
-        <li><a href="index.php?page=home">HOME</a></li>
-        <li><a href="index.php?page=about">ABOUT</a></li>
-        <li><a href="index.php?page=contact">CONTACT</a></li>
-        <li><a href="index.php?page=register">REGISTER</a></li>
-        <li><a href="index.php?page=login">LOGIN</a></li>
-    </ul>
-    </div>';
+    '<li><a href="index.php?page=login">LOG IN</a></li>';
+}
+
+function showRegisterButton()
+{
+    echo
+    '<li><a href="index.php?page=register">REGISTER</a></li>';
 }

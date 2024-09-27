@@ -1,14 +1,16 @@
 <?php
 session_start();
 
-require_once 'config.php';
-require_once 'database.php';
+require_once 'database/config.php';
+require_once 'database/database.php';
 require_once 'user_service.php';
 require_once 'session_manager.php';
 
 // TOP LEVEL
 $page = getRequestedPage();
-showResponsePage($page);
+$userLoggedIn = isUserLoggedIn();
+showResponsePage($page, $userLoggedIn);
+
 
 // FUNCTIONS
 function getRequestedPage()
@@ -40,11 +42,11 @@ function getPageFromUrl($key, $default = '')
     }
 };
 
-function showResponsePage($page)
+function showResponsePage($page, $userLoggedIn)
 {
     showDocumentStart();
     showHeadSection();
-    showBodySection($page);
+    showBodySection($page, $userLoggedIn);
     showDocumentEnd();
 };
 
@@ -62,10 +64,10 @@ function showHeadSection()
     </head>';
 };
 
-function showBodySection($page)
+function showBodySection($page, $userLoggedIn)
 {
     showBodyStart();
-    showMenu();
+    showMenu($userLoggedIn);
     include 'pages/header.php';
     showHeader();
     showContent($page);
@@ -84,14 +86,10 @@ function showBodyStart()
     echo '<body>';
 };
 
-function showMenu()
+function showMenu($userLoggedIn)
 {
     require_once 'pages/menu.php';
-    if (isset($_SESSION['loggedIn'])) {
-        showActiveMenu();
-    } else {
-        showInactiveMenu();
-    }
+    buildMenu($userLoggedIn);
 }
 
 function showContent($page)
@@ -118,9 +116,9 @@ function showContent($page)
             showLoginPage();
             break;
         case 'logout':
-            require_once 'pages/home.php';
             doLogoutUser();
-            showHomePage();
+            showMenu(false);
+            showContent('home');
         default:
             require_once 'pages/home.php';
             break;

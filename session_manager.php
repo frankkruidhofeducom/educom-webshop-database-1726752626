@@ -1,8 +1,16 @@
 <?php
-require_once 'database.php';
+function isUserLoggedIn() //checks if a user is logged into the session
+{
+    if (isset($_SESSION['loggedIn'])) {
+        return true;
+    }
+    return false;
+}
 
-function setUserSession($user): array
-{ //krijgt variabelen van login pagina, wijst ze toen aan sessie variabelen
+function doLoginUser(array $loginInput)
+{
+    $user = getUserByEmail($loginInput['email']);    // get user data from database 
+
     $_SESSION['name'] = $user['name'];
     $_SESSION['email'] = $user['email'];
     $_SESSION['password'] = $user['password'];
@@ -10,15 +18,16 @@ function setUserSession($user): array
     return $_SESSION;
 }
 
-function doLoginUser($email)
+function doLogoutUser() 
 {
-    $user = getUserByEmail($email);    // haal rest variabelen op uit getuser 
-    setUserSession($user);     //geeft variabelen door aan session manager 
-
-}
-
-function doLogoutUser()
-{
-    session_unset();
-    session_destroy();
+    $_SESSION['name'] = null;
+    $_SESSION['email'] = null;
+    $_SESSION['password'] = null;
+    $_SESSION['loggedIn'] = null;
+    return $_SESSION;
 };
+
+function endSession() //when?????
+{
+    session_reset();
+}

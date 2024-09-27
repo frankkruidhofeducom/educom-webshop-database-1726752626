@@ -1,12 +1,12 @@
 <?php
-require_once 'session_manager.php';
 
 function showLoginPage()
 {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $formInput = getLoginAttempt();
         if (verifyLogin($formInput)) {
-            showLoginSuccess();
+            doLoginUser($formInput);
+            showContent('home');
         } else {
             showLoginForm();
         }
@@ -59,12 +59,3 @@ function showLoginForm()
     </div>';
 }
 
-function showLoginSuccess()
-{
-    echo '<div class="content">
-    <h2>Welkom terug,';
-    echo ($_SESSION['name']);
-    echo '!</h2>
-    <p>Hier komt een bevestiging</p>
-</div>';
-}
