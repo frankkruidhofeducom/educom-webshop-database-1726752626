@@ -1,6 +1,6 @@
 ```mermaid
 erDiagram
-    user ||--o{ order : Places
+    user ||--o{ invoice : Places
     user {
         int    id        PK
         string name
@@ -8,29 +8,30 @@ erDiagram
         string password
     }
     
-    order ||--|{ order_line : Contains
-    order {
+    invoice ||--|{ invoice_line : Contains
+    invoice {
         int    id                PK
-        int    user_id           
-        int    invoice_id        FK
-        string date   
+        int    user_id           FK
+        string date
+        decimal order_total 
     }
 
-    order_line }|--|| product : Contains
-    order_line {
-        int    id          PK
-        int    order_id    
-        int    product_id  FK, UK
-        int    quantity
+    invoice_line }|--|| product : Contains
+    invoice_line {
+        int        id            PK
+        int        invoice_id    FK
+        int        product_id    FK
+        int        quantity
+        decimal    subtotal 
 }
 
     product {
-        int    id            PK
-        int    product_id    UK
-        string name
-        string description
-        float  price
-        blob   product_image
+        int     id            PK
+        string  article_id    UK
+        string  name
+        string  description
+        decimal price
+        string  product_image
     }
         
 ```
