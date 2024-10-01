@@ -14,7 +14,7 @@ function showShopStart()
 {
     echo
     '<div class="productlist">
-    <h1>Shop</h1>';
+    <h1>Alle producten</h1>';
 }
 
 function showShopEnd()
@@ -27,9 +27,12 @@ function showShopEnd()
 function showProductListItem($product)
 {
     echo
-    '<div class="product">';
-    // show product details
-    echo '
+    '<div class="product">
+        <img src="'. $product['image'] .'" alt="product image">
+      <h3>'. $product['name'] .'</h3>
+      <p> Artikelno.:'. $product['article_id'] .'</p>
+      <p>Prijs: €'. $product['price'] .'</p>
+      <p> Productbeschrijving: '. $product['description'] .'</p>
     </div>';
 }
 
