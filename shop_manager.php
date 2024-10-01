@@ -8,3 +8,4 @@ function getAllProducts()
     $products = getAllRows($tableName, $column);
     return $products;
 }
+

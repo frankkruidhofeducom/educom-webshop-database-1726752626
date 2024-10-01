@@ -49,6 +49,23 @@ function getUserByEmail(string $email): ?array // find user in users table by em
     return $foundUsers;
 }
 
+function getProductbyArticleId($articleId)
+{
+       // prepare statement
+       $conn = connectDatabase();
+       $stmt = $conn->prepare("SELECT * FROM products WHERE article_id=?");
+       $stmt->bind_param("s", $articleId);
+   
+       // set parameters & execute statement 
+       $stmt->execute();
+       $product = $stmt->get_result()->fetch_assoc();
+   
+       // close statement
+       $stmt->close();
+       $conn->close();
+       // return array
+       return $product;
+}
 
 function createSelectSqlStatement(string $tableName, array $column): string
 {

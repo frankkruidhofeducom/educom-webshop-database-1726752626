@@ -28,8 +28,8 @@ function showProductListItem($product)
 {
     echo
     '<div class="product">
-        <img src="'. $product['image'] .'" alt="product image">
-      <h3>'. $product['name'] .'</h3>
+        <a href="index.php?page=product&product='.$product['article_id'].'"><img src="'. $product['image'] .'" alt="product image"></a>
+      <a href="index.php?page=product&product='.$product['article_id'].'"><h3>'. $product['name'] .'</h3></a>
       <p> Artikelno.:'. $product['article_id'] .'</p>
       <p>Prijs: €'. $product['price'] .'</p>
       <p> Productbeschrijving: '. $product['description'] .'</p>

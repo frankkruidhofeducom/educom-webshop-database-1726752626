@@ -124,6 +124,10 @@ function showContent($page)
             require_once 'pages/shop.php';
             showShopPage();
             break;
+        case 'product':
+            require_once 'pages/product.php';
+            showProductPage();
+            break;
         default:
             require_once 'pages/home.php';
             break;
