@@ -119,6 +119,10 @@ function showContent($page)
             doLogoutUser();
             showMenu(false);
             showContent('home');
+        case 'shop':
+            require_once 'pages/shop.php';
+            showShopPage();
+            break;
         default:
             require_once 'pages/home.php';
             break;
