@@ -48,3 +48,33 @@ function getUserByEmail(string $email): ?array // find user in users table by em
     // return array
     return $foundUsers;
 }
+
+
+function createSelectSqlStatement(string $tableName, array $column): string
+{
+    $sql = "";
+    $get = "";
+    
+    $get = implode(", ", $column);
+    $sql .= "SELECT ";
+    $sql .= $get;
+    $sql .= " FROM " . $tableName . " ";
+
+    return $sql;
+}
+
+function getAllRows(string $tableName, array $column):array //returns associative array
+{   
+    //get database connection
+    $conn = connectDatabase();
+    // prepare statement
+    $sql = createSelectSqlStatement($tableName, $column);
+    $stmt = $conn->prepare($sql);
+    // execute statement
+    $stmt->execute();
+    // get results from query
+    $products = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+    // end statements
+    $stmt->close();
+    return $products;
+}
