@@ -11,10 +11,17 @@ function getProductFromUrl() // gets articleId passed on in URL
     return $articleId;
 }
 
+
 function showProductPage() // shows product page by getting product info from database with articleID
 {
     $articleId = getProductFromUrl();
     $product = getProductbyArticleId($articleId);
+
+    $request_type = $_SERVER['REQUEST_METHOD'];
+    if ($request_type == 'POST') {
+        $newCartItem = getCartItem();
+        addToCart($newCartItem);
+    }     
 
     echo '
     <div class="productpage">
@@ -25,7 +32,32 @@ function showProductPage() // shows product page by getting product info from da
             <h2>' . $product['name'] . '</h2>
             <p>' . $product['description'] . '</p>
             <h3>€' . $product['price'] . '</h3>
-            <input type="submit" value="Voeg toe aan winkelwagen">
+            <form method="post">
+                <input type="hidden" name="page" value="product">
+                <input type="hidden" name="addToCart" value="'. $product['article_id'] .'">
+                <input type="submit" value="Voeg toe aan winkelwagen">
+            </form>
         </div>
     </div>';
+
 }
+
+function getCartItem():string
+{
+    if (isset($_POST['addToCart'])) {
+        $newCartItem = $_POST['addToCart'];
+        return $newCartItem;
+    } 
+}
+
+function addToCart($newCartItem): array
+{    
+    array_push($_SESSION['shoppingCart'], $newCartItem);
+    var_dump($_SESSION['shoppingCart']);
+    return $_SESSION['shoppingCart'];
+    // add product identifyer to session variables
+}
+
+
+
+//product="'. $product['article_id'] .'

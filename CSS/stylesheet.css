@@ -13,6 +13,17 @@
     margin: auto;
 }
 
+a {
+    text-decoration: none !important;
+    color: var(--black);
+}
+
+a:hover {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: var(--blue);
+}
+
 header {
     position: fixed;
     top: 0px;
@@ -25,9 +36,6 @@ header a {
     color: var(--blue);
 }
 
-header a:hover {
-    cursor: pointer;
-}
 
 /* Navigation */
 .navbar {
@@ -124,10 +132,34 @@ input[type="submit"] {
     color: var(--blue);
 }
 
+
 input[type="submit"]:hover {
     color: var(--white);
     background-color: var(--blue);
     transition: 0.35s;
+    cursor: pointer;
+}
+
+button {
+    width: auto;
+    padding: 10px;
+    margin: 10px;
+
+    border-radius: 20px;
+    border-style: solid;
+    border-color: var(--blue);
+    background-color: var(--white);
+
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--blue);
+}
+
+button:hover {
+    color: var(--white);
+    background-color: var(--blue);
+    transition: 0.35s;
+    cursor: pointer;
 }
 
 fieldset {
@@ -217,7 +249,7 @@ input[type="radio"]+label {
     width: 580px;
 }
 
-.productpage input[type="submit"] {
+.productpage input[type="button"] {
     float: inline-end;
 }
 
@@ -227,6 +259,30 @@ input[type="radio"]+label {
     color: var(--black);
     margin-top: 120px;
 }
+
+.shoppingcart div {
+    display: block;
+    height: 200px;  
+    text-align: right !important;
+}
+
+.shoppingcart div img {
+    display: block;
+    width: auto;
+    height: 120px;
+    float:left;
+}
+
+.shoppingcart div h3 {
+    text-align: right;
+}
+
+.shoppingcart a {
+    
+}
+
+
+
 
 /*Footer*/
 footer {

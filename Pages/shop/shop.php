@@ -17,12 +17,13 @@ function showShopStart()
     <h1>Alle producten</h1>';
 }
 
-function showShopEnd()
+function getAllProducts()
 {
-    echo
-    '</div>';
+    $tableName = 'products';
+    $column = ['*'];
+    $products = getAllRows($tableName, $column);
+    return $products;
 }
-
 
 function showProductListItem($product)
 {
@@ -34,4 +35,12 @@ function showProductListItem($product)
       <p>Prijs: €'. $product['price'] .'</p>
     </div>';
 }
+
+function showShopEnd()
+{
+    echo
+    '</div>';
+}
+
+
 

@@ -1,4 +1,6 @@
 <?php
+
+//////////* Log user in & out of session *//////////
 function isUserLoggedIn() //checks if a user is logged into the session
 {
     if (isset($_SESSION['loggedIn'])) {
@@ -26,6 +28,15 @@ function doLogoutUser()
     $_SESSION['loggedIn'] = null;
     return $_SESSION;
 };
+
+//////////* save products in session *//////////
+function startShoppingCart():array
+{
+    $_SESSION['shoppingCart'] = array();
+    return $_SESSION['shoppingCart'];
+}
+
+
 
 function endSession() //when?????
 {
