@@ -17,25 +17,15 @@ function doLoginUser(array $loginInput)
     $_SESSION['email'] = $user['email'];
     $_SESSION['password'] = $user['password'];
     $_SESSION['loggedIn'] = 'yes';
+    $_SESSION['shoppingCart']=array();
     return $_SESSION;
 }
 
 function doLogoutUser() 
 {
-    $_SESSION['name'] = null;
-    $_SESSION['email'] = null;
-    $_SESSION['password'] = null;
-    $_SESSION['loggedIn'] = null;
+    session_unset();
     return $_SESSION;
 };
-
-//////////* save products in session *//////////
-function startShoppingCart():array
-{
-    $_SESSION['shoppingCart'] = array();
-    return $_SESSION['shoppingCart'];
-}
-
 
 
 function endSession() //when?????

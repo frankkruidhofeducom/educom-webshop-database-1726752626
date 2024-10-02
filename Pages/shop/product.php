@@ -52,7 +52,7 @@ function getCartItem():string
 
 function addToCart($newCartItem): array
 {    
-    array_push($_SESSION['shoppingCart'], $newCartItem);
+    $_SESSION['shoppingCart'][]= $newCartItem;
     var_dump($_SESSION['shoppingCart']);
     return $_SESSION['shoppingCart'];
     // add product identifyer to session variables

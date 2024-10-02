@@ -32,9 +32,11 @@ function showShoppingCartEnd()
 function showShoppingCart()
 {
     showShoppingCartStart();
-    foreach ($_SESSION['shoppingCart'] as $articleId) {
-        $cartItem = getProductbyArticleId($articleId);
-        showCartItem($cartItem);
+    if (isset($_SESSION['shoppingCart'])){
+        foreach ($_SESSION['shoppingCart'] as $articleId) {
+            $cartItem = getProductbyArticleId($articleId);
+            showCartItem($cartItem);
+        }
     }
-    showShoppingCartEnd();
+        showShoppingCartEnd();
 }
