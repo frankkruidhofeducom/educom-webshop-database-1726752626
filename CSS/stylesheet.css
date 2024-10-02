@@ -19,6 +19,15 @@ header {
     left: 0px;
     margin: 5px;
 }
+
+header a {
+    text-decoration: none;
+    color: var(--blue);
+}
+
+header a:hover {
+    cursor: pointer;
+}
 /* Navigation */
 .navbar {
     position: fixed;
