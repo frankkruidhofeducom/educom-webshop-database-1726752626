@@ -20,7 +20,6 @@ function showFixedMenuItems()
 {
     echo
     '<li><a href="index.php?page=home">HOME</a></li>
-        <li><a href="index.php?page=about">ABOUT</a></li>
         <li><a href="index.php?page=shop">SHOP</a></li>
         <li><a href="index.php?page=contact">CONTACT</a></li>';
 }

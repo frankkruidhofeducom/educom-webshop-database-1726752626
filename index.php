@@ -100,10 +100,6 @@ function showContent($page)
             require_once 'pages/home.php';
             showHomePage();
             break;
-        case 'about':
-            require_once 'pages/about.php';
-            showAboutPage();
-            break;
         case 'contact':
             require_once 'pages/contact.php';
             showContactPage();
