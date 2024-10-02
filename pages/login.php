@@ -7,7 +7,6 @@ function showLoginPage()
         if (verifyLogin($formInput)) {
             doLoginUser($formInput);
             showContent('home');
-            showMenu('true');
         } else {
             showLoginForm();
         }
@@ -31,7 +30,7 @@ function showLoginForm()
 {
     echo 
     '<div class="content">
-    <h1>Login</h1>
+    <h2>Login</h2>
     <form method="post" action="index.php?">
         <input type=hidden name="page" value="login">
         <fieldset>

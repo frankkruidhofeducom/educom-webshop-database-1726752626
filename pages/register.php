@@ -76,7 +76,7 @@ function showRegisterForm() // shows register form
 {
     echo 
     '<div class="content">
-    <h1>Maak een account aan</h1>
+    <h2>Maak een account aan</h2>
     <form method="post" action="index.php?">
         <input type=hidden name="page" value="register">
         <fieldset>
