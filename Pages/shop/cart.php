@@ -35,7 +35,7 @@ function showShoppingCart()
     if (isset($_SESSION['shoppingCart'])){
         foreach ($_SESSION['shoppingCart'] as $articleId) {
             $cartItem = getProductbyArticleId($articleId);
-            showCartItem($cartItem);
+            showCartItem($cartItem); /// also show quantity and subtotal 
         }
     }
         showShoppingCartEnd();

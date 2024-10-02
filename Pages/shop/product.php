@@ -52,12 +52,13 @@ function getCartItem():string
 
 function addToCart($newCartItem): array
 {    
-    $_SESSION['shoppingCart'][]= $newCartItem;
-    var_dump($_SESSION['shoppingCart']);
+    if (!array_search($newCartItem, $_SESSION['shoppingCart']))
+    {
+        $_SESSION['shoppingCart'][]= $newCartItem;///// not finished 
+    }
     return $_SESSION['shoppingCart'];
-    // add product identifyer to session variables
+    
+    // check if item is already in cart
+    // if item is already in cart, add +1 to array key
+
 }
-
-
-
-//product="'. $product['article_id'] .'
