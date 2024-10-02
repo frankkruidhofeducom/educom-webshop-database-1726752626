@@ -113,15 +113,21 @@ input[type="submit"] {
     width: auto;
     padding: 10px;
     margin: 10px;
-    border-radius: 15px;
-    background-color: var(--blue);
-    color: var(--white);
-    font-weight: bold;
 
+    border-radius: 20px;
+    border-style: solid;
+    border-color: var(--blue);
+    background-color: var(--white);
+
+    font-weight: bold;
+    font-size: 14px;
+    color: var(--blue);
 }
 
 input[type="submit"]:hover {
-    background-color: var(--black);
+    color: var(--white);
+    background-color: var(--blue);
+    transition: 0.35s;
 }
 
 fieldset {
@@ -204,11 +210,15 @@ input[type="radio"]+label {
 
 .productpage div h3 {
     text-align: right;
-    margin-top: 16px;
+    margin: 16px 16px 8px 16px;
 }
 
 .productpage img {
     width: 580px;
+}
+
+.productpage input[type="submit"] {
+    float: inline-end;
 }
 
 .shoppingcart {

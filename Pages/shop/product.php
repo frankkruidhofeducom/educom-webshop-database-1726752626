@@ -25,6 +25,7 @@ function showProductPage() // shows product page by getting product info from da
             <h2>' . $product['name'] . '</h2>
             <p>' . $product['description'] . '</p>
             <h3>€' . $product['price'] . '</h3>
+            <input type="submit" value="Voeg toe aan winkelwagen">
         </div>
     </div>';
 }
