@@ -118,12 +118,16 @@ function showContent($page)
             showContent('home');
             break;
         case 'shop':
-            require_once 'pages/shop.php';
+            require_once 'pages/shop/shop.php';
             showShopPage();
             break;
         case 'product':
-            require_once 'pages/product.php';
+            require_once 'pages/shop/product.php';
             showProductPage();
+            break;
+        case 'cart';
+            require_once 'pages/shop/cart.php';
+            showShoppingCart();
             break;
         default:
             require_once 'pages/home.php';

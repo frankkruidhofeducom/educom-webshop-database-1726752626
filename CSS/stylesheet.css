@@ -28,6 +28,7 @@ header a {
 header a:hover {
     cursor: pointer;
 }
+
 /* Navigation */
 .navbar {
     position: fixed;
@@ -51,7 +52,7 @@ header a:hover {
 
     font-size: 18px;
     font-weight: bold;
-    color: var(--blue)!important;
+    color: var(--blue) !important;
     align-content: center;
     color: var(--white);
     text-align: center;
@@ -65,25 +66,21 @@ header a:hover {
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-  'FILL' 0,
-  'wght' 400,
-  'GRAD' 0,
-  'opsz' 24
+    font-variation-settings:
+        'FILL'0,
+        'wght'400,
+        'GRAD'0,
+        'opsz'24
 }
 
 
 /*Content*/
 
-.content
-
-/* Content */
-    {
+.content {
     width: 800px;
     font-size: 12px;
     color: var(--black);
     margin-top: 120px;
-
 }
 
 .content div {
@@ -187,7 +184,7 @@ input[type="radio"]+label {
     text-align: left;
 
     margin: 16px;
-    padding:8px;
+    padding: 8px;
 }
 
 .productpage {
@@ -212,6 +209,13 @@ input[type="radio"]+label {
 
 .productpage img {
     width: 580px;
+}
+
+.shoppingcart {
+    width: 800px;
+    font-size: 12px;
+    color: var(--black);
+    margin-top: 120px;
 }
 
 /*Footer*/
