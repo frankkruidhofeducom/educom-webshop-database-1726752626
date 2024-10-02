@@ -14,12 +14,16 @@
 }
 
 header {
-    margin-top: 50px;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    margin: 5px;
 }
 /* Navigation */
 .navbar {
     position: fixed;
     top: 0px;
+    right: 0px;
 
 }
 

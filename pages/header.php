@@ -3,6 +3,6 @@ function showHeader()
 {
     echo
     '<header>
-    <h1>Supercoole website header</h1>
-</header>';
+        <h1>KoelBlauw</h1>
+    </header>';
 };
