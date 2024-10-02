@@ -7,6 +7,7 @@ function showLoginPage()
         if (verifyLogin($formInput)) {
             doLoginUser($formInput);
             showContent('home');
+            showMenu('true');
         } else {
             showLoginForm();
         }

@@ -61,6 +61,7 @@ function showHeadSection()
 {
     echo '<head>
     <link rel="stylesheet" href="css/stylesheet.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
     <title>Educom Webshop Basis</title>
     </head>';
 };
@@ -68,10 +69,10 @@ function showHeadSection()
 function showBodySection($page, $userLoggedIn)
 {
     showBodyStart();
-    showMenu($userLoggedIn);
     include 'pages/header.php';
     showHeader();
-    showContent($page);
+    showMenu();
+    showContent($page, $userLoggedIn);
     include 'pages/footer.php';
     showFooter();
     showBodyEnd();
@@ -87,10 +88,10 @@ function showBodyStart()
     echo '<body>';
 };
 
-function showMenu($userLoggedIn)
+function showMenu()
 {
     require_once 'pages/menu.php';
-    buildMenu($userLoggedIn);
+    buildMenu();
 }
 
 function showContent($page)
@@ -114,8 +115,8 @@ function showContent($page)
             break;
         case 'logout':
             doLogoutUser();
-            showMenu(false);
             showContent('home');
+            break;
         case 'shop':
             require_once 'pages/shop.php';
             showShopPage();

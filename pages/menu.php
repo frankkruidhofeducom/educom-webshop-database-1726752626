@@ -1,11 +1,11 @@
 <?php
 require_once 'session_manager.php';
 
-function buildMenu($userLoggedIn)
-{
+function buildMenu()
+{   
     showMenuStart();
     showFixedMenuItems();
-    showDynamicMenuItems($userLoggedIn);
+    showDynamicMenuItems();
     showMenuEnd();
 }
 
@@ -31,8 +31,9 @@ function showMenuEnd()
     </div>';
 }
 
-function showDynamicMenuItems($userLoggedIn)
-{
+function showDynamicMenuItems()
+{   
+    $userLoggedIn = isUserLoggedIn();
     if ($userLoggedIn) {
         showLogoutButton();
         showCartButton();
@@ -51,7 +52,9 @@ function showLogoutButton()
 function showCartButton()
 {
     echo 
-    '<li><a href="index.php?page=cart">Cart</a></li>';
+    '<li><a href="index.php?page=cart"><i class="material-symbols-outlined">
+shopping_cart
+</i></a></li>';
 }
 
 function showLoginButton()
