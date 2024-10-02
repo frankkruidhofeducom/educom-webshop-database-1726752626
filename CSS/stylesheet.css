@@ -1,18 +1,21 @@
 /* Cascade Style Sheet for this website */
-:root{
+:root {
     --regular-font: Verdana, Geneva, Tahoma, sans-serif;
 
     --blue: #1d9ec9;
     --white: #fff;
-    --black:#000; 
+    --black: #000;
     --orange: #C9741C;
 }
 
 * {
-   font-family: var(--regular-font);
-   margin: auto;
+    font-family: var(--regular-font);
+    margin: auto;
 }
 
+header {
+    margin-top: 50px;
+}
 /* Navigation */
 .navbar {
     position: fixed;
@@ -46,19 +49,22 @@
 
 /*Content*/
 
-.content /* Content */{
+.content
+
+/* Content */
+    {
     width: 800px;
     font-size: 12px;
     color: var(--black);
     margin-top: 50px;
-    
+
 }
 
 .content block {
     display: block;
     width: auto;
     padding: 10px;
-    
+
     background-color: var(--blue);
     color: var(--white);
 }
@@ -72,14 +78,18 @@
 
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
     min-height: 48px;
     text-align: center;
     color: var(--blue);
 }
 
 /*Form*/
-input, textarea, select {
+input,
+textarea,
+select {
     width: 400px;
 }
 
@@ -90,35 +100,36 @@ input[type="radio"] {
 
 /*Submit button*/
 input[type="submit"] {
-    width:auto;
+    width: auto;
     padding: 10px;
     margin: 10px;
     border-radius: 15px;
     background-color: var(--blue);
     color: var(--white);
     font-weight: bold;
-    
+
 }
 
-input[type="submit"]:hover{
-    background-color: var(--black);    
+input[type="submit"]:hover {
+    background-color: var(--black);
 }
 
 fieldset {
     border-style: none;
     margin: 0px 0px 0px -10px;
 }
+
 /*Labels*/
 label {
-    display:inline-block;
+    display: inline-block;
     width: 120px;
     font-weight: bold;
 }
 
 
-input[type="radio"]+label{
-    width:auto;
-    font-weight:normal;
+input[type="radio"]+label {
+    width: auto;
+    font-weight: normal;
 }
 
 .radiobuttons ul {
@@ -128,7 +139,7 @@ input[type="radio"]+label{
 }
 
 .error {
-    color:var(--orange);
+    color: var(--orange);
     font-weight: bold;
 }
 
@@ -152,13 +163,9 @@ input[type="radio"]+label{
     text-decoration: none;
 }
 
-.product {
+.productlist_item {
     display: inline-block;
     width: 400px;
-
-    border-color: var(--blue);
-    border-width: 2px;
-    border-style: solid;
 
     text-align: left;
 
@@ -166,19 +173,40 @@ input[type="radio"]+label{
     padding: 2%;
 }
 
-.product img {
-    // adjust size of image 
+.productpage {
+    margin-top: 50px;
+    width: 1000px;
+
+    font-size: 12px;
+    color: var(--black);
+}
+
+.productpage div {
+    display: block;
+    width: 450px;
+    padding: 5px;
+    float: inline-start;
+}
+
+.productpage div h3 {
+    text-align: right;
+    margin-top: 10px;
+}
+
+.productpage img {
+    width: 450px;
 }
 
 /*Footer*/
 footer {
     position: fixed;
     bottom: 0px;
-    width: 100%;;
-    
+    width: 100%;
+    ;
+
     background-color: black;
     color: white;
     font-size: 10px;
     text-align: right;
-    
+
 }

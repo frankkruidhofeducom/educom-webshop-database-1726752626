@@ -17,11 +17,14 @@ function showProductPage() // shows product page by getting product info from da
     $product = getProductbyArticleId($articleId);
 
     echo '
-    <div class="product">
-    <h2>'. $product['name'] .'</h2>
-    <img src="'. $product['image'] .'" alt="product image">
-    <p>€'. $product['price'] .'</p>
-    <p>'. $product['description']. '</p>
+    <div class="productpage">
+        <div>
+            <img src="' . $product['image'] . '" alt="product image">
+        </div>
+        <div>
+            <h2>' . $product['name'] . '</h2>
+            <p>' . $product['description'] . '</p>
+            <h3>€' . $product['price'] . '</h3>
+        </div>
     </div>';
-
 }
