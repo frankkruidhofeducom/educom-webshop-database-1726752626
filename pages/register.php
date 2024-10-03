@@ -10,7 +10,6 @@ function showRegisterPage()
             showRegisterForm($formInput);
         } else {
             showRegisterSuccess($formInput);
-            require_once 'login.php';
         }
     } else {
         showRegisterForm();
@@ -74,7 +73,7 @@ function showUserExists() //shows error if client tries to register email that i
 
 function showRegisterForm() // shows register form 
 {
-    echo 
+    echo
     '<div class="content">
     <h2>Maak een account aan</h2>
     <form method="post" action="index.php?">

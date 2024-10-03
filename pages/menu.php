@@ -2,7 +2,7 @@
 require_once 'session_manager.php';
 
 function buildMenu()
-{   
+{
     showMenuStart();
     showFixedMenuItems();
     showDynamicMenuItems();
@@ -32,7 +32,7 @@ function showMenuEnd()
 }
 
 function showDynamicMenuItems()
-{   
+{
     $userLoggedIn = isUserLoggedIn();
     if ($userLoggedIn) {
         showLogoutButton();
@@ -45,13 +45,13 @@ function showDynamicMenuItems()
 
 function showLogoutButton()
 {
-    echo 
+    echo
     '<li><a href="index.php?page=logout">Logout ' . $_SESSION['name'] . '</a></li>';
 }
 
 function showCartButton()
 {
-    echo 
+    echo
     '<li><a href="index.php?page=cart"><i class="material-symbols-outlined">
 shopping_cart
 </i></a></li>';
