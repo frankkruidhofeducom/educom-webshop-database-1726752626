@@ -7,6 +7,8 @@ require_once 'user_service.php';
 require_once 'session_manager.php';
 require_once 'shop_manager.php';
 
+initiateSessionVar();
+
 // TOP LEVEL
 $page = getRequestedPage();
 $userLoggedIn = isUserLoggedIn();

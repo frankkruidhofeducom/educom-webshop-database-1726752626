@@ -1,4 +1,16 @@
 <?php
+function initiateSessionVar()
+{
+    if (!isUserLoggedIn()) {
+
+        $_SESSION['name'] = null;
+        $_SESSION['email'] = null;
+        $_SESSION['password'] = null;
+        $_SESSION['loggedIn'] = null;
+        $_SESSION['shoppingcartId'] = insertNewShoppingcart();
+    } 
+    return $_SESSION;
+}
 
 //////////* Log user in & out of session *//////////
 function isUserLoggedIn() //checks if a user is logged into the session
@@ -16,8 +28,9 @@ function doLoginUser(array $loginInput)
     $_SESSION['name'] = $user['name'];
     $_SESSION['email'] = $user['email'];
     $_SESSION['password'] = $user['password'];
+    $_SESSION['userId'] = $user['id'];
     $_SESSION['loggedIn'] = 'yes';
-    $_SESSION['shoppingCart']=array();
+    $_SESSION['shoppingcartId']= getShoppingcartIdFromUser();
     return $_SESSION;
 }
 
