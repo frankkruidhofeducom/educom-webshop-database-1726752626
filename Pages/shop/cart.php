@@ -1,14 +1,15 @@
 <?php
 
-function showCartItem($cartItem) // show box with product image, price, quantity etc.
+function showCartItem($productDetails, $quantity) // show box with product image, price, quantity etc.
 {
     echo
-    '<a href="index.php?page=product&product=' . $cartItem['article_id'] . '"><div>
-        <img src="' . $cartItem['image'] . '" alt="product image">
+    '<a href="index.php?page=product&product=' . $productDetails['article_id'] . '"><div>
+        <img src="' . $productDetails['image'] . '" alt="product image">
         <div>
-            <h3>' . $cartItem['name'] . '</h3>
-            <p> Artikelno.:' . $cartItem['article_id'] . '</p>
-            <p>Prijs: €' . $cartItem['price'] . '</p>
+            <h3>' . $productDetails['name'] . '</h3>
+            <p> Artikelno.:' . $productDetails['article_id'] . '</p>
+            <p>Prijs: €' . $productDetails['price'] . '</p>
+            <p>Aantal:' . $quantity . ' stuks</p>
         </div>
     </div>
     </a>';
@@ -32,11 +33,18 @@ function showShoppingCartEnd()
 function showShoppingCart()
 {
     showShoppingCartStart();
-    if (isset($_SESSION['shoppingCart'])){
-        foreach ($_SESSION['shoppingCart'] as $articleId) {
-            $cartItem = getProductbyArticleId($articleId);
-            showCartItem($cartItem); /// also show quantity and subtotal 
+    if (isset($_SESSION['shoppingcartId'])) {
+        $shoppingcartId = $_SESSION['shoppingcartId'];
+        $itemsInCart = selectShoppingcartItemsByShoppingCartId($shoppingcartId);
+        if (!$itemsInCart) {
+            echo '<p>Er zit nog niks in de winkelwagen</p>';
+        } else {
+            foreach ($itemsInCart as $item) {
+                $productDetails = selectFromProductsByProductId($item);
+                $quantity = selectQuantityFromCartItem($shoppingcartId, $item);
+                showCartItem($productDetails, $quantity);
+            } /// also show quantity and subtotal 
         }
     }
-        showShoppingCartEnd();
+    showShoppingCartEnd();
 }

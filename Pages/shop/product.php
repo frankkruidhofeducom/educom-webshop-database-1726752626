@@ -21,7 +21,7 @@ function showProductPage() // shows product page by getting product info from da
     if ($request_type == 'POST') {
         $newCartItem = getCartItem();
         addToCart($newCartItem);
-    }     
+    }
 
     echo '
     <div class="productpage">
@@ -34,31 +34,37 @@ function showProductPage() // shows product page by getting product info from da
             <h3>€' . $product['price'] . '</h3>
             <form method="post">
                 <input type="hidden" name="page" value="product">
-                <input type="hidden" name="addToCart" value="'. $product['article_id'] .'">
+                <input type="hidden" name="addToCart" value="' . $product['id'] . '">
                 <input type="submit" value="Voeg toe aan winkelwagen">
             </form>
         </div>
     </div>';
-
 }
 
-function getCartItem():string
+function getCartItem(): array
 {
     if (isset($_POST['addToCart'])) {
-        $newCartItem = $_POST['addToCart'];
+        $articleId = $_POST['addToCart'];
+        $newCartItem = array("articleId" => $articleId, "quantity" => 1);
         return $newCartItem;
-    } 
+    }
 }
 
-function addToCart($newCartItem): array
-{    
-    if (!array_search($newCartItem, $_SESSION['shoppingCart']))
-    {
-        $_SESSION['shoppingCart'][]= $newCartItem;///// not finished 
-    }
-    return $_SESSION['shoppingCart'];
-    
-    // check if item is already in cart
-    // if item is already in cart, add +1 to array key
+function addToCart($productId)
+{
+    $shoppingcartId = getShoppingcartId();
+    $quantity = setShoppingcartItemQuantity($shoppingcartId, $productId);
+    var_dump($shoppingcartId);
+    insertNewShoppingcartItem($shoppingcartId, $productId, $quantity);
+}
 
+function setShoppingcartItemQuantity($shoppingcartId, $productId)
+{
+    if (!isItemInShoppingcart($shoppingcartId, $productId)) {        
+        $quantity = 1;
+        return $quantity;
+    } else {
+        $quantity = increaseItemQuantityByOne(, $shoppingcartId, $productId);
+        return $quantity;
+    }
 }

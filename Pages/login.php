@@ -28,8 +28,9 @@ function getLoginAttempt(): array
 
 function showLoginForm()
 {
-    echo '<h2>Login</h2>
-    <div class="content">
+    echo 
+    '<div class="content">
+    <h2>Login</h2>
     <form method="post" action="index.php?">
         <input type=hidden name="page" value="login">
         <fieldset>

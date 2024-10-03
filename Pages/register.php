@@ -74,8 +74,9 @@ function showUserExists() //shows error if client tries to register email that i
 
 function showRegisterForm() // shows register form 
 {
-    echo '<h2>Maak een account aan</h2>
-    <div class="content">
+    echo 
+    '<div class="content">
+    <h2>Maak een account aan</h2>
     <form method="post" action="index.php?">
         <input type=hidden name="page" value="register">
         <fieldset>

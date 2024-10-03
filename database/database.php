@@ -67,6 +67,24 @@ function getProductbyArticleId($articleId)
        return $product;
 }
 
+function selectFromProductsByProductId($productId)
+{
+       // prepare statement
+       $conn = connectDatabase();
+       $stmt = $conn->prepare("SELECT * FROM products WHERE id=?");
+       $stmt->bind_param("i", $productId);
+   
+       // set parameters & execute statement 
+       $stmt->execute();
+       $product = $stmt->get_result()->fetch_assoc();
+   
+       // close statement
+       $stmt->close();
+       $conn->close();
+       // return array
+       return $product;
+}
+
 function createSelectSqlStatement(string $tableName, array $column): string
 {
     $sql = "";
@@ -94,4 +112,145 @@ function getAllRows(string $tableName, array $column):array //returns associativ
     // end statements
     $stmt->close();
     return $products;
+}
+
+function insertNewShoppingcart() //creates new row in table with no user_id
+{
+     $conn = connectDatabase();
+
+     $stmt = $conn->prepare("INSERT INTO shoppingcarts (id) VALUE ('0')"); 
+
+     if ($stmt->execute() === TRUE) {
+        $lastId = $conn->insert_id;
+        $stmt->close();
+        $conn->close();
+        return $lastId;
+     } else {
+        echo "Sorry, er kon helaas geen winkelmandje gemaakt worden...";
+        $stmt->close();
+        $conn->close();
+     }
+}
+
+function saveShoppingcartToUser() // assign user_id to shoppingcart
+{
+    // if user is not logged in and has a shoppingcart in the session, they should be able to save the session shoppingcart to their account
+    // if user registers, they should get a shoppingcart assigned to their account
+    // if user logs in, the account's shoppingcart should load
+    // when they pay, a new empty shoppingcart should be assigned to their account
+} 
+
+function getShoppingcartIdFromSession():string
+{
+    if (isset($_SESSION['shoppingcartId'])) {
+        $shoppingcartId = $_SESSION['shoppingcartId'];
+        var_dump($shoppingcartId);
+        return $shoppingcartId;
+    }
+}
+
+function getShoppingcartIdFromUser()
+{
+    $userId = $_SESSION['userId'];
+    $conn = connectDatabase();
+    $stmt = $conn->prepare("SELECT id FROM shoppingcarts WHERE user_id=?");
+    $stmt->bind_param("i", $userId);
+
+    $stmt->execute();
+    $shoppingcartId = $stmt->get_result()->fetch_object();
+
+    $stmt->close();
+    $conn->close();
+    var_dump($shoppingcartId);
+
+    return $shoppingcartId;
+}
+
+function getShoppingcartId()
+{
+    if (isUserLoggedIn()) {
+        $shoppingcartId = getShoppingcartIdFromUser($_SESSION['userId']);
+        return $shoppingcartId;
+    } else {
+        $shoppingcartId = getShoppingcartIdFromSession($_SESSION['shoppingcartId']);
+        return $shoppingcartId; //kan ook simpeler, dat $_SESSION['shoppingcartId'] overschreven wordt als user inlogt, en er gewoon altijd naar $_SESSION['shoppingcartId'] gevraagd kan worden
+    }
+}
+
+function insertNewShoppingcartItem($shoppingcartId, $productId, $quantity):int //inserts new row into shoppingcart_items table  
+{
+    $conn = connectDatabase();
+
+    $stmt = $conn->prepare("INSERT INTO shoppingcart_items (shoppingcart_id, product_id, quantity) VALUES (?,?,?)");
+    $stmt->bind_param("iii", $shoppingcartId, $productId, $quantity);
+
+    $stmt->execute();
+    $lastId = $conn->insert_id;
+    
+    $stmt->close();
+    $conn->close();
+    return $lastId;
+}
+
+
+function isItemInShoppingcart($shoppingcartId, $productId) // checks if item user tries to add to shoppingcart is already in shoppingcart or not
+{ 
+    $itemsInCart = selectShoppingcartItemsByShoppingCartId($shoppingcartId);
+    if (array_search($productId, $itemsInCart)) {
+        return true;
+    } return false;
+}
+
+function increaseItemQuantityByOne($shoppingcartId, $productId) // updates quantity of shoppingcart_item
+{
+    $currentQuantity = selectQuantityFromCartItem($shoppingcartId, $productId);
+    $newQuantity = ++$currentQuantity;
+    return $newQuantity;
+}
+
+function getShoppingcartItemByProductId($productId)
+{
+    $conn = connectDatabase();
+    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE product_id=?");
+    $stmt->bind_param("i", $productId);
+
+    $stmt->execute();
+    $shoppingcartItem = $stmt->get_result()->fetch_assoc();
+
+    $stmt->close();
+    $conn->close();
+
+    return $shoppingcartItem;
+}
+
+function selectShoppingcartItemsByShoppingCartId($shoppingcartId)
+{
+    $conn = connectDatabase();
+
+    $stmt = $conn->prepare("SELECT product_id FROM shoppingcart_items WHERE shoppingcart_id=?");
+    $stmt->bind_param("i", $shoppingcartId);
+
+    $stmt->execute();
+    $itemsInCart = $stmt->get_result()->fetch_assoc();
+
+    $stmt->close();
+    $conn->close();
+
+    return $itemsInCart;
+}
+
+function selectQuantityFromCartItem($shoppingcartId, $productId)
+{
+    $conn = connectDatabase();
+
+    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
+    $stmt->bind_param("ii", $shoppingcartId, $productId);
+
+    $stmt->execute();
+    $itemQuantity = $stmt->get_result();
+
+    $stmt->close();
+    $conn->close();
+
+    return $itemQuantity;
 }
