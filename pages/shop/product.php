@@ -64,7 +64,7 @@ function setShoppingcartItemQuantity($shoppingcartId, $productId)
         $quantity = 1;
         return $quantity;
     } else {
-        $quantity = increaseItemQuantityByOne(, $shoppingcartId, $productId);
+        $quantity = increaseItemQuantityByOne($shoppingcartId, $productId);
         return $quantity;
     }
 }
