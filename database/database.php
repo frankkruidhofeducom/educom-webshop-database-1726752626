@@ -277,9 +277,21 @@ function selectQuantityFromCartItem($cartId, $productId)
 function calculateCartItemSubtotal($item, $quantity)
 {
     $productId = $item['product_id'];
-    $price = getProductPrice($productId);// get cart item price
+    $price = getProductPrice($productId);
     $subtotal = $price * $quantity;
-    return $subtotal;// return subtotal 
+    return $subtotal;
+}
+
+function calculateCartTotal($cartId)
+{   
+    $total = 0;
+    $itemsInCart = selectCartItemsByCartId($cartId);
+    foreach ($itemsInCart as $cartItem) {
+        $quantity = $cartItem['quantity'];
+        $itemTotal = calculateCartItemSubtotal($cartItem, $quantity);
+        $total = $total  + $itemTotal;
+    }
+    return $total;
 }
 
 function getProductPrice($productId)

@@ -28,10 +28,8 @@ function showShoppingCartStart()
 
 function showShoppingCartEnd()
 {
-    echo
-    // show cart total 
-    // show button to payment page 
-    '</div>';
+
+    echo '</div>';
 }
 
 function showShoppingCart()
@@ -44,7 +42,13 @@ function showShoppingCart()
     } else {
         foreach ($itemsInCart as $item) {
             showCartItem($item);
-        } /// also show quantity and subtotal 
+        }
+        $cartTotal = calculateCartTotal($cartId);
+        echo 
+        '<div class="cart-total">
+            <h2>Totaal: €' . $cartTotal . '</h2>
+            <input type="submit" value="Afrekenen">
+        </div>';
     }
     showShoppingCartEnd();
 }
