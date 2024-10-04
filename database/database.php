@@ -274,9 +274,8 @@ function selectQuantityFromCartItem($cartId, $productId)
     return $itemQuantity;
 }
 
-function calculateCartItemSubtotal($item, $quantity)
+function calculateCartItemSubtotal($productId, $quantity)
 {
-    $productId = $item['product_id'];
     $price = getProductPrice($productId);
     $subtotal = $price * $quantity;
     return $subtotal;
@@ -320,6 +319,36 @@ function insertNewInvoice()
         $stmt = $conn->prepare("INSERT INTO invoice (user_id, invoice_date) VALUES (?,?)");
         $stmt->bind_param("is", $userId, $date);
         $stmt->execute();
+        $invoiceId = $conn->insert_id;
         $stmt->close();
+        return $invoiceId;
     }
 
+
+
+function insertNewInvoiceLine($invoiceId, $productId, $quantity, $subtotal) 
+{
+    $conn = connectDatabase();
+    $stmt = $conn->prepare("INSERT INTO invoice_line (invoice_id, product_id, quantity, subtotal) VALUES (?,?,?,?)");
+    $stmt->bind_param("iiis", $invoiceId, $productId, $quantity, $subtotal);
+    $stmt->execute();
+    $stmt->close();
+}
+
+function transformCartItemsToInvoiceLines($cartId)
+{   
+    $invoiceId = insertNewInvoice();
+    $conn = connectDatabase();
+    $stmt = $conn->prepare("SELECT product_id, quantity FROM shoppingcart_items WHERE shoppingcart_id=?");
+    $stmt->bind_param("i", $cartId);
+    $stmt->execute();
+    $itemRow = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
+
+    foreach ($itemRow as $item) {
+        $productId = $item['product_id'];
+        $quantity = $item['quantity'];
+        $subtotal = calculateCartItemSubtotal($productId, $quantity);
+        insertNewInvoiceLine($invoiceId, $productId, $quantity, $subtotal);
+    }
+    $stmt->close();
+}
