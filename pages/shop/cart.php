@@ -1,7 +1,10 @@
 <?php
 
-function showCartItem($productDetails, $quantity) // show box with product image, price, quantity etc.
+function showCartItem($item) // show box with product image, price, quantity etc.
 {
+    $productDetails = selectFromProductsByProductId($item['product_id']);
+    $quantity = $item['quantity'];
+    $subtotal = calculateCartItemSubtotal($item, $quantity);
     echo
     '<a href="index.php?page=product&product=' . $productDetails['article_id'] . '"><div>
         <img src="' . $productDetails['image'] . '" alt="product image">
@@ -10,6 +13,7 @@ function showCartItem($productDetails, $quantity) // show box with product image
             <p> Artikelno.:' . $productDetails['article_id'] . '</p>
             <p>Prijs: €' . $productDetails['price'] . '</p>
             <p>Aantal:' . $quantity . ' stuks</p>
+            <h4>Subtotaal: €' . $subtotal . '</h4>
         </div>
     </div>
     </a>';
@@ -39,9 +43,7 @@ function showShoppingCart()
         echo '<p>Er zit nog niks in de winkelwagen</p>';
     } else {
         foreach ($itemsInCart as $item) {
-            $productDetails = selectFromProductsByProductId($item['product_id']);
-            $quantity = $item['quantity'];
-            showCartItem($productDetails, $quantity);
+            showCartItem($item);
         } /// also show quantity and subtotal 
     }
     showShoppingCartEnd();

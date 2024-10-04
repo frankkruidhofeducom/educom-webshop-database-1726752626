@@ -273,3 +273,23 @@ function selectQuantityFromCartItem($cartId, $productId)
 
     return $itemQuantity;
 }
+
+function calculateCartItemSubtotal($item, $quantity)
+{
+    $productId = $item['product_id'];
+    $price = getProductPrice($productId);// get cart item price
+    $subtotal = $price * $quantity;
+    return $subtotal;// return subtotal 
+}
+
+function getProductPrice($productId)
+{
+    $conn = connectDatabase();
+    $stmt = $conn->prepare("SELECT price FROM products WHERE id=?");
+    $stmt->bind_param("i", $productId);
+    $stmt->execute();
+    $price = $stmt->get_result()->fetch_column();
+    $stmt->close();
+    $conn->close();
+    return $price;
+}
