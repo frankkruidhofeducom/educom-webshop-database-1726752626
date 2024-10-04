@@ -19,8 +19,8 @@ function showProductPage() // shows product page by getting product info from da
 
     $request_type = $_SERVER['REQUEST_METHOD'];
     if ($request_type == 'POST') {
-        $newCartItem = getCartItem();
-        addToCart($newCartItem);
+        $productId = $product['id'];
+        addToCart($productId);  
     }
 
     echo '
@@ -41,30 +41,18 @@ function showProductPage() // shows product page by getting product info from da
     </div>';
 }
 
-function getCartItem(): array
+function getCartItem()
 {
     if (isset($_POST['addToCart'])) {
-        $articleId = $_POST['addToCart'];
-        $newCartItem = array("articleId" => $articleId, "quantity" => 1);
-        return $newCartItem;
+        $productId = $_POST['addToCart'];
+        return $productId;
+    } else {
+        echo '<span>Product kon helaas niet worden toegevoegd aan winkelmandje</span>';
     }
 }
 
 function addToCart($productId)
-{
-    $shoppingcartId = getShoppingcartId();
-    $quantity = setShoppingcartItemQuantity($shoppingcartId, $productId);
-    var_dump($shoppingcartId);
-    insertNewShoppingcartItem($shoppingcartId, $productId, $quantity);
-}
-
-function setShoppingcartItemQuantity($shoppingcartId, $productId)
-{
-    if (!isItemInShoppingcart($shoppingcartId, $productId)) {        
-        $quantity = 1;
-        return $quantity;
-    } else {
-        $quantity = increaseItemQuantityByOne($shoppingcartId, $productId);
-        return $quantity;
-    }
+{   
+    $shoppingcartId = getShoppingcartIdFromUser();
+    insertNewShoppingcartItem($shoppingcartId, $productId);
 }

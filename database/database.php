@@ -144,7 +144,6 @@ function getShoppingcartIdFromSession():string
 {
     if (isset($_SESSION['shoppingcartId'])) {
         $shoppingcartId = $_SESSION['shoppingcartId'];
-        var_dump($shoppingcartId);
         return $shoppingcartId;
     }
 }
@@ -157,11 +156,11 @@ function getShoppingcartIdFromUser()
     $stmt->bind_param("i", $userId);
 
     $stmt->execute();
-    $shoppingcartId = $stmt->get_result()->fetch_object();
+    $shoppingcartRow = $stmt->get_result()->fetch_assoc();
+    $shoppingcartId = $shoppingcartRow['id'];
 
     $stmt->close();
     $conn->close();
-    var_dump($shoppingcartId);
 
     return $shoppingcartId;
 }
@@ -177,13 +176,22 @@ function getShoppingcartId()
     }
 }
 
-function insertNewShoppingcartItem($shoppingcartId, $productId, $quantity):int //inserts new row into shoppingcart_items table  
+function insertNewShoppingcartItem($shoppingcartId, $productId):int
 {
     $conn = connectDatabase();
-
-    $stmt = $conn->prepare("INSERT INTO shoppingcart_items (shoppingcart_id, product_id, quantity) VALUES (?,?,?)");
-    $stmt->bind_param("iii", $shoppingcartId, $productId, $quantity);
-
+    if (isItemInShoppingcart($shoppingcartId, $productId)){ 
+        $quantity = increaseItemQuantityByOne($shoppingcartId, $productId); 
+        echo 'Product is found in cart and this is the data that will go into the database (quantity, cart id, product id):';
+        var_dump($quantity); var_dump($shoppingcartId); var_dump($productId);
+        $stmt = $conn->prepare("UPDATE shoppingcart_items SET quantity=? WHERE shoppingcart_id=? AND product_id=?");
+        $stmt->bind_param("iii", $quantity, $shoppingcartId, $productId);
+    } else {
+        $quantity = 1;
+        echo 'Product is NOT FOUND in cart and this is the data that will go into the database (quantity, cart id, product id):';
+        var_dump($quantity); var_dump($shoppingcartId); var_dump($productId);
+        $stmt = $conn->prepare("INSERT INTO shoppingcart_items (shoppingcart_id, product_id, quantity) VALUES (?,?,?)");
+        $stmt->bind_param("iii", $shoppingcartId, $productId, $quantity);
+    }
     $stmt->execute();
     $lastId = $conn->insert_id;
     
@@ -195,16 +203,24 @@ function insertNewShoppingcartItem($shoppingcartId, $productId, $quantity):int /
 
 function isItemInShoppingcart($shoppingcartId, $productId) // checks if item user tries to add to shoppingcart is already in shoppingcart or not
 { 
-    $itemsInCart = selectShoppingcartItemsByShoppingCartId($shoppingcartId);
-    if (array_search($productId, $itemsInCart)) {
-        return true;
-    } return false;
+    $conn = connectDatabase();
+
+    $stmt = $conn->prepare("SELECT product_id FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
+    $stmt->bind_param("ii", $shoppingcartId, $productId);
+
+    $stmt->execute();
+    $itemsInCart = $stmt->get_result()->fetch_column();
+
+    $stmt->close();
+    $conn->close();
+
+    return $itemsInCart;
 }
 
 function increaseItemQuantityByOne($shoppingcartId, $productId) // updates quantity of shoppingcart_item
 {
     $currentQuantity = selectQuantityFromCartItem($shoppingcartId, $productId);
-    $newQuantity = ++$currentQuantity;
+    $newQuantity = $currentQuantity + 1;
     return $newQuantity;
 }
 
@@ -231,7 +247,7 @@ function selectShoppingcartItemsByShoppingCartId($shoppingcartId)
     $stmt->bind_param("i", $shoppingcartId);
 
     $stmt->execute();
-    $itemsInCart = $stmt->get_result()->fetch_assoc();
+    $itemsInCart = $stmt->get_result()->fetch_column();
 
     $stmt->close();
     $conn->close();
@@ -246,8 +262,11 @@ function selectQuantityFromCartItem($shoppingcartId, $productId)
     $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
     $stmt->bind_param("ii", $shoppingcartId, $productId);
 
-    $stmt->execute();
-    $itemQuantity = $stmt->get_result();
+    if ($stmt->execute()) {
+        $itemQuantity = $stmt->get_result()->fetch_column();
+    } else {
+        $itemQuantity = 0;
+    }
 
     $stmt->close();
     $conn->close();

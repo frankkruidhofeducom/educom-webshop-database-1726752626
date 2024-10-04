@@ -34,14 +34,13 @@ function showShoppingCart()
 {
     showShoppingCartStart();
     if (isset($_SESSION['shoppingcartId'])) {
-        $shoppingcartId = $_SESSION['shoppingcartId'];
-        $itemsInCart = selectShoppingcartItemsByShoppingCartId($shoppingcartId);
+        $itemsInCart = selectShoppingcartItemsByShoppingCartId($_SESSION['shoppingcartId']);
         if (!$itemsInCart) {
             echo '<p>Er zit nog niks in de winkelwagen</p>';
         } else {
             foreach ($itemsInCart as $item) {
                 $productDetails = selectFromProductsByProductId($item);
-                $quantity = selectQuantityFromCartItem($shoppingcartId, $item);
+                $quantity = selectQuantityFromCartItem($_SESSION['shoppingcartId'], $item);
                 showCartItem($productDetails, $quantity);
             } /// also show quantity and subtotal 
         }
