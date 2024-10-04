@@ -53,6 +53,6 @@ function getCartItem()
 
 function addToCart($productId)
 {   
-    $shoppingcartId = getShoppingcartIdFromUser();
-    insertNewShoppingcartItem($shoppingcartId, $productId);
+    $cartId = getCartIdFromUser();
+    insertNewCartItem($cartId, $productId);
 }

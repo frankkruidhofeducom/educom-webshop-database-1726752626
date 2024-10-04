@@ -253,31 +253,31 @@ input[type="radio"]+label {
     float: inline-end;
 }
 
-.shoppingcart {
+.cart {
     width: 800px;
     font-size: 12px;
     color: var(--black);
     margin-top: 120px;
 }
 
-.shoppingcart div {
+.cart div {
     display: block;
     height: 200px;  
     text-align: right !important;
 }
 
-.shoppingcart div img {
+.cart div img {
     display: block;
     width: auto;
     height: 120px;
     float:left;
 }
 
-.shoppingcart div h3 {
+.cart div h3 {
     text-align: right;
 }
 
-.shoppingcart a {
+.cart a {
     
 }
 

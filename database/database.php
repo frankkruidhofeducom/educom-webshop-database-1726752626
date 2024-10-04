@@ -114,11 +114,11 @@ function getAllRows(string $tableName, array $column):array //returns associativ
     return $products;
 }
 
-function insertNewShoppingcart() //creates new row in table with no user_id
+function insertNewCart() //creates new row in table with no user_id
 {
      $conn = connectDatabase();
 
-     $stmt = $conn->prepare("INSERT INTO shoppingcarts (id) VALUE ('0')"); 
+     $stmt = $conn->prepare("INSERT INTO carts (id) VALUE ('0')"); 
 
      if ($stmt->execute() === TRUE) {
         $lastId = $conn->insert_id;
@@ -132,65 +132,65 @@ function insertNewShoppingcart() //creates new row in table with no user_id
      }
 }
 
-function saveShoppingcartToUser() // assign user_id to shoppingcart
+function saveCartToUser() // assign user_id to cart
 {
-    // if user is not logged in and has a shoppingcart in the session, they should be able to save the session shoppingcart to their account
-    // if user registers, they should get a shoppingcart assigned to their account
-    // if user logs in, the account's shoppingcart should load
-    // when they pay, a new empty shoppingcart should be assigned to their account
+    // if user is not logged in and has a cart in the session, they should be able to save the session cart to their account
+    // if user registers, they should get a cart assigned to their account
+    // if user logs in, the account's cart should load
+    // when they pay, a new empty cart should be assigned to their account
 } 
 
-function getShoppingcartIdFromSession():string
+function getCartIdFromSession():string
 {
-    if (isset($_SESSION['shoppingcartId'])) {
-        $shoppingcartId = $_SESSION['shoppingcartId'];
-        return $shoppingcartId;
+    if (isset($_SESSION['cartId'])) {
+        $cartId = $_SESSION['cartId'];
+        return $cartId;
     }
 }
 
-function getShoppingcartIdFromUser()
+function getCartIdFromUser()
 {
     $userId = $_SESSION['userId'];
     $conn = connectDatabase();
-    $stmt = $conn->prepare("SELECT id FROM shoppingcarts WHERE user_id=?");
+    $stmt = $conn->prepare("SELECT id FROM carts WHERE user_id=?");
     $stmt->bind_param("i", $userId);
 
     $stmt->execute();
-    $shoppingcartRow = $stmt->get_result()->fetch_assoc();
-    $shoppingcartId = $shoppingcartRow['id'];
+    $cartRow = $stmt->get_result()->fetch_assoc();
+    $cartId = $cartRow['id'];
 
     $stmt->close();
     $conn->close();
 
-    return $shoppingcartId;
+    return $cartId;
 }
 
-function getShoppingcartId()
+function getCartId()
 {
     if (isUserLoggedIn()) {
-        $shoppingcartId = getShoppingcartIdFromUser($_SESSION['userId']);
-        return $shoppingcartId;
+        $cartId = getCartIdFromUser($_SESSION['userId']);
+        return $cartId;
     } else {
-        $shoppingcartId = getShoppingcartIdFromSession($_SESSION['shoppingcartId']);
-        return $shoppingcartId; //kan ook simpeler, dat $_SESSION['shoppingcartId'] overschreven wordt als user inlogt, en er gewoon altijd naar $_SESSION['shoppingcartId'] gevraagd kan worden
+        $cartId = getCartIdFromSession($_SESSION['cartId']);
+        return $cartId; //kan ook simpeler, dat $_SESSION['cartId'] overschreven wordt als user inlogt, en er gewoon altijd naar $_SESSION['cartId'] gevraagd kan worden
     }
 }
 
-function insertNewShoppingcartItem($shoppingcartId, $productId):int
+function insertNewCartItem($cartId, $productId):int
 {
     $conn = connectDatabase();
-    if (isItemInShoppingcart($shoppingcartId, $productId)){ 
-        $quantity = increaseItemQuantityByOne($shoppingcartId, $productId); 
+    if (isItemInCart($cartId, $productId)){ 
+        $quantity = increaseItemQuantityByOne($cartId, $productId); 
         echo 'Product is found in cart and this is the data that will go into the database (quantity, cart id, product id):';
-        var_dump($quantity); var_dump($shoppingcartId); var_dump($productId);
-        $stmt = $conn->prepare("UPDATE shoppingcart_items SET quantity=? WHERE shoppingcart_id=? AND product_id=?");
-        $stmt->bind_param("iii", $quantity, $shoppingcartId, $productId);
+        var_dump($quantity); var_dump($cartId); var_dump($productId);
+        $stmt = $conn->prepare("UPDATE cart_items SET quantity=? WHERE cart_id=? AND product_id=?");
+        $stmt->bind_param("iii", $quantity, $cartId, $productId);
     } else {
         $quantity = 1;
         echo 'Product is NOT FOUND in cart and this is the data that will go into the database (quantity, cart id, product id):';
-        var_dump($quantity); var_dump($shoppingcartId); var_dump($productId);
-        $stmt = $conn->prepare("INSERT INTO shoppingcart_items (shoppingcart_id, product_id, quantity) VALUES (?,?,?)");
-        $stmt->bind_param("iii", $shoppingcartId, $productId, $quantity);
+        var_dump($quantity); var_dump($cartId); var_dump($productId);
+        $stmt = $conn->prepare("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?,?,?)");
+        $stmt->bind_param("iii", $cartId, $productId, $quantity);
     }
     $stmt->execute();
     $lastId = $conn->insert_id;
@@ -201,12 +201,12 @@ function insertNewShoppingcartItem($shoppingcartId, $productId):int
 }
 
 
-function isItemInShoppingcart($shoppingcartId, $productId) // checks if item user tries to add to shoppingcart is already in shoppingcart or not
+function isItemInCart($cartId, $productId) // checks if item user tries to add to cart is already in cart or not
 { 
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT product_id FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
-    $stmt->bind_param("ii", $shoppingcartId, $productId);
+    $stmt = $conn->prepare("SELECT product_id FROM cart_items WHERE cart_id=? AND product_id=?");
+    $stmt->bind_param("ii", $cartId, $productId);
 
     $stmt->execute();
     $itemsInCart = $stmt->get_result()->fetch_column();
@@ -217,34 +217,34 @@ function isItemInShoppingcart($shoppingcartId, $productId) // checks if item use
     return $itemsInCart;
 }
 
-function increaseItemQuantityByOne($shoppingcartId, $productId) // updates quantity of shoppingcart_item
+function increaseItemQuantityByOne($cartId, $productId) // updates quantity of cart_item
 {
-    $currentQuantity = selectQuantityFromCartItem($shoppingcartId, $productId);
+    $currentQuantity = selectQuantityFromCartItem($cartId, $productId);
     $newQuantity = $currentQuantity + 1;
     return $newQuantity;
 }
 
-function getShoppingcartItemByProductId($productId)
+function getCartItemByProductId($productId)
 {
     $conn = connectDatabase();
-    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE product_id=?");
+    $stmt = $conn->prepare("SELECT quantity FROM cart_items WHERE product_id=?");
     $stmt->bind_param("i", $productId);
 
     $stmt->execute();
-    $shoppingcartItem = $stmt->get_result()->fetch_assoc();
+    $cartItem = $stmt->get_result()->fetch_assoc();
 
     $stmt->close();
     $conn->close();
 
-    return $shoppingcartItem;
+    return $cartItem;
 }
 
-function selectShoppingcartItemsByShoppingCartId($shoppingcartId)
+function selectCartItemsByShoppingCartId($cartId)
 {
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT product_id FROM shoppingcart_items WHERE shoppingcart_id=?");
-    $stmt->bind_param("i", $shoppingcartId);
+    $stmt = $conn->prepare("SELECT product_id FROM cart_items WHERE cart_id=?");
+    $stmt->bind_param("i", $cartId);
 
     $stmt->execute();
     $itemsInCart = $stmt->get_result()->fetch_column();
@@ -255,12 +255,12 @@ function selectShoppingcartItemsByShoppingCartId($shoppingcartId)
     return $itemsInCart;
 }
 
-function selectQuantityFromCartItem($shoppingcartId, $productId)
+function selectQuantityFromCartItem($cartId, $productId)
 {
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
-    $stmt->bind_param("ii", $shoppingcartId, $productId);
+    $stmt = $conn->prepare("SELECT quantity FROM cart_items WHERE cart_id=? AND product_id=?");
+    $stmt->bind_param("ii", $cartId, $productId);
 
     if ($stmt->execute()) {
         $itemQuantity = $stmt->get_result()->fetch_column();

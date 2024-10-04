@@ -18,7 +18,7 @@ function showCartItem($productDetails, $quantity) // show box with product image
 function showShoppingCartStart()
 {
     echo
-    '<div class="shoppingcart">
+    '<div class="cart">
         <h1>Winkelwagen</h1>';
 }
 
@@ -33,14 +33,14 @@ function showShoppingCartEnd()
 function showShoppingCart()
 {
     showShoppingCartStart();
-    if (isset($_SESSION['shoppingcartId'])) {
-        $itemsInCart = selectShoppingcartItemsByShoppingCartId($_SESSION['shoppingcartId']);
+    if (isset($_SESSION['cartId'])) {
+        $itemsInCart = selectCartItemsByShoppingCartId($_SESSION['cartId']);
         if (!$itemsInCart) {
             echo '<p>Er zit nog niks in de winkelwagen</p>';
         } else {
             foreach ($itemsInCart as $item) {
                 $productDetails = selectFromProductsByProductId($item);
-                $quantity = selectQuantityFromCartItem($_SESSION['shoppingcartId'], $item);
+                $quantity = selectQuantityFromCartItem($_SESSION['cartId'], $item);
                 showCartItem($productDetails, $quantity);
             } /// also show quantity and subtotal 
         }

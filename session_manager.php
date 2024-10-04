@@ -7,7 +7,7 @@ function initiateSessionVar()
         $_SESSION['email'] = null;
         $_SESSION['password'] = null;
         $_SESSION['loggedIn'] = null;
-        $_SESSION['shoppingcartId'] = insertNewShoppingcart();
+        $_SESSION['cartId'] = insertNewCart();
     }
     return $_SESSION;
 }
@@ -30,7 +30,7 @@ function doLoginUser(array $loginInput)
     $_SESSION['password'] = $user['password'];
     $_SESSION['userId'] = $user['id'];
     $_SESSION['loggedIn'] = 'yes';
-    $_SESSION['shoppingcartId'] = getShoppingcartIdFromUser();
+    $_SESSION['cartId'] = getCartIdFromUser();
     return $_SESSION;
 }
 
