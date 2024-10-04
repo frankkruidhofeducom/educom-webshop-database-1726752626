@@ -1,11 +1,25 @@
 ```mermaid
 erDiagram
     user ||--o{ invoice : Places
+    user ||--|| shoppingcart : Has
     user {
         int    id        PK
         string name
         string email     UK
         string password
+    }
+
+    shoppingcart {
+        int id         PK
+        int user_id    FK
+    }
+
+    shoppingcart ||--o{ shoppingcart_items : Contains
+    shoppingcart_items {
+        int id              PK
+        int shoppingcart_id FK
+        int product_id      FK
+        int quantity
     }
     
     invoice ||--|{ invoice_line : Contains
