@@ -305,3 +305,21 @@ function getProductPrice($productId)
     $conn->close();
     return $price;
 }
+
+function insertNewInvoice()
+    {
+        if (isUserLoggedIn()) {
+            $userId = $_SESSION['userId'];
+        } else {
+            $userId = null;
+        }
+
+        $date = date("Y-m-d");
+
+        $conn = connectDatabase();
+        $stmt = $conn->prepare("INSERT INTO invoice (user_id, invoice_date) VALUES (?,?)");
+        $stmt->bind_param("is", $userId, $date);
+        $stmt->execute();
+        $stmt->close();
+    }
+
