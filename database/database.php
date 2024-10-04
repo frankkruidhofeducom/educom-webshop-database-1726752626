@@ -118,7 +118,7 @@ function insertNewCart() //creates new row in table with no user_id
 {
      $conn = connectDatabase();
 
-     $stmt = $conn->prepare("INSERT INTO carts (id) VALUE ('0')"); 
+     $stmt = $conn->prepare("INSERT INTO shoppingcarts (id) VALUE ('0')"); 
 
      if ($stmt->execute() === TRUE) {
         $lastId = $conn->insert_id;
@@ -152,7 +152,7 @@ function getCartIdFromUser()
 {
     $userId = $_SESSION['userId'];
     $conn = connectDatabase();
-    $stmt = $conn->prepare("SELECT id FROM carts WHERE user_id=?");
+    $stmt = $conn->prepare("SELECT id FROM shoppingcarts WHERE user_id=?");
     $stmt->bind_param("i", $userId);
 
     $stmt->execute();
@@ -183,13 +183,13 @@ function insertNewCartItem($cartId, $productId):int
         $quantity = increaseItemQuantityByOne($cartId, $productId); 
         echo 'Product is found in cart and this is the data that will go into the database (quantity, cart id, product id):';
         var_dump($quantity); var_dump($cartId); var_dump($productId);
-        $stmt = $conn->prepare("UPDATE cart_items SET quantity=? WHERE cart_id=? AND product_id=?");
+        $stmt = $conn->prepare("UPDATE shoppingcart_items SET quantity=? WHERE shoppingcart_id=? AND product_id=?");
         $stmt->bind_param("iii", $quantity, $cartId, $productId);
     } else {
         $quantity = 1;
         echo 'Product is NOT FOUND in cart and this is the data that will go into the database (quantity, cart id, product id):';
         var_dump($quantity); var_dump($cartId); var_dump($productId);
-        $stmt = $conn->prepare("INSERT INTO cart_items (cart_id, product_id, quantity) VALUES (?,?,?)");
+        $stmt = $conn->prepare("INSERT INTO shoppingcart_items (shoppingcart_id, product_id, quantity) VALUES (?,?,?)");
         $stmt->bind_param("iii", $cartId, $productId, $quantity);
     }
     $stmt->execute();
@@ -205,7 +205,7 @@ function isItemInCart($cartId, $productId) // checks if item user tries to add t
 { 
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT product_id FROM cart_items WHERE cart_id=? AND product_id=?");
+    $stmt = $conn->prepare("SELECT product_id FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
     $stmt->bind_param("ii", $cartId, $productId);
 
     $stmt->execute();
@@ -227,7 +227,7 @@ function increaseItemQuantityByOne($cartId, $productId) // updates quantity of c
 function getCartItemByProductId($productId)
 {
     $conn = connectDatabase();
-    $stmt = $conn->prepare("SELECT quantity FROM cart_items WHERE product_id=?");
+    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE product_id=?");
     $stmt->bind_param("i", $productId);
 
     $stmt->execute();
@@ -239,15 +239,15 @@ function getCartItemByProductId($productId)
     return $cartItem;
 }
 
-function selectCartItemsByShoppingCartId($cartId)
+function selectCartItemsByCartId($cartId)
 {
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT product_id FROM cart_items WHERE cart_id=?");
+    $stmt = $conn->prepare("SELECT * FROM shoppingcart_items WHERE shoppingcart_id=?");
     $stmt->bind_param("i", $cartId);
 
     $stmt->execute();
-    $itemsInCart = $stmt->get_result()->fetch_column();
+    $itemsInCart = $stmt->get_result()->fetch_all(MYSQLI_ASSOC);
 
     $stmt->close();
     $conn->close();
@@ -259,7 +259,7 @@ function selectQuantityFromCartItem($cartId, $productId)
 {
     $conn = connectDatabase();
 
-    $stmt = $conn->prepare("SELECT quantity FROM cart_items WHERE cart_id=? AND product_id=?");
+    $stmt = $conn->prepare("SELECT quantity FROM shoppingcart_items WHERE shoppingcart_id=? AND product_id=?");
     $stmt->bind_param("ii", $cartId, $productId);
 
     if ($stmt->execute()) {

@@ -33,17 +33,16 @@ function showShoppingCartEnd()
 function showShoppingCart()
 {
     showShoppingCartStart();
-    if (isset($_SESSION['cartId'])) {
-        $itemsInCart = selectCartItemsByShoppingCartId($_SESSION['cartId']);
-        if (!$itemsInCart) {
-            echo '<p>Er zit nog niks in de winkelwagen</p>';
-        } else {
-            foreach ($itemsInCart as $item) {
-                $productDetails = selectFromProductsByProductId($item);
-                $quantity = selectQuantityFromCartItem($_SESSION['cartId'], $item);
-                showCartItem($productDetails, $quantity);
-            } /// also show quantity and subtotal 
-        }
+    $cartId = getCartId();
+    $itemsInCart = selectCartItemsByCartId($cartId);
+    if (!$itemsInCart) {
+        echo '<p>Er zit nog niks in de winkelwagen</p>';
+    } else {
+        foreach ($itemsInCart as $item) {
+            $productDetails = selectFromProductsByProductId($item['product_id']);
+            $quantity = $item['quantity'];
+            showCartItem($productDetails, $quantity);
+        } /// also show quantity and subtotal 
     }
     showShoppingCartEnd();
 }
